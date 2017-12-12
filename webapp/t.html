@@ -1,0 +1,72 @@
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="js/dagre-d3.js"></script>
+
+<svg width=800 height=600>
+    <g/>
+</svg>
+
+
+<!--<script src="test.js"></script>-->
+<script language="javascript">
+    var scn1 = '{"ScenarioName": "scenario1","AnalysisData": "dev_data.json","IR": [{"p_index": 0,"index": 1,"parent": 0,"stage": 1,"category": "Arrange:Chart","interaction": "barchart","parameters": "x=email, y=count(id)","chart": "chart1","weight": 1},{"p_index": 1,"index": 2,"parent": 0,"stage": 1,"category": "Arrange:Order","interaction": "orderBy","parameters": "count(id)","chart": "chart1","weight": 2},{"p_index": 2,"index": 3,"parent": 0,"stage": 1,"category": "Map:Color","interaction": "changeColor","parameters": "blue","chart": "chart1","weight": 3},{"p_index": 3,"index": 4,"parent": 0,"stage": 1,"category": "Map:Label","interaction": "addLabel","parameters": "label=data","chart": "chart1","weight": 4},{"p_index": 4,"index": 5,"parent": 0,"stage": 1,"category": "Manipulate:Select","interaction": "brush","parameters": {"email":[\"mbostock@gmail.com\", \"jason@jasondavies.com\"]},"chart": "chart1","weight": 5},{"p_index": 5,"index": 6,"parent": 1,"stage": 2,"category": "Manipulate:Select","interaction": "filterRange","parameters": "year=2011~2012","chart": "chart1","weight": 6},{"p_index": 6,"index": 7,"parent": 2,"stage": 3,"category": "Facet:Juxtapose","interaction": "copyAndJuxtapose","parameters": "horizontal","chart": "chart2","weight": 7},{"p_index": 7,"index": 8,"parent": 3,"stage": 4,"category": "Manipulate:Select","interaction": "filterRange","parameters": "year=2013~2014","chart": "chart2","weight": 3},{"p_index": 5,"index": 9,"parent": 1,"stage": 5,"category": "Manipulate:Select","interaction": "filterAscendingTop","parameters": 3,"chart": "chart2","weight": 6},{"p_index": 9,"index": 10,"parent": 5,"stage": 6,"category": "Arrange:Chart","interaction": "linechart","parameters": "x=year(author_date), y=filtered(count(id))","chart": "chart3","weight": 8},{"p_index": 10,"index": 11,"parent": 5,"stage": 6,"category": "Map:Color","interaction": "changeColor","parameters": "range=colorbrewer2.xxx","chart": "chart3","weight": 3},{"p_index": 11,"index": 12,"parent": 5,"stage": 6,"category": "Arrange:Express","interaction": "addAverageLine","parameters": "year","chart": "chart3","weight": 5}]}';
+    var IRs = JSON.parse(scn1).IR;
+    // console.log(IRs);
+
+    var abstractedLogs = [];
+    IRs.forEach(function (d, i) {
+        if (abstractedLogs[d.stage - 1] === undefined) {
+            var stageInteraction = { "stageSummary": d.category + ":" + d.interaction, interactions: [d] };
+            abstractedLogs[d.stage - 1] = stageInteraction;
+            stageInteraction["stage"] = d.stage;
+            stageInteraction["parent"] = d.parent;
+
+        } else {
+            abstractedLogs[d.stage - 1].interactions.push(d);
+            abstractedLogs[d.stage - 1].stageSummary += "->" + d.category + ":" + d.interaction
+        }
+    });
+
+    var g = new dagreD3.graphlib.Graph()
+        .setGraph({})
+        .setDefaultEdgeLabel(function () { return; });
+
+    var i = 0;
+    abstractedLogs.forEach(function (stage) {
+        // g.setNode(stage.stage,  { label: "TOP",       class: "type-TOP" });
+        console.log();
+        g.setNode(stage.stage, { label: stage.stage, style: "fill: #afa" });
+    });
+    g.nodes().forEach(function (v) {
+        var node = g.node(v);
+        // Round the corners of the nodes
+        node.rx = node.ry = 5;
+    });
+
+    for (var fi = 0; fi < abstractedLogs.length; fi++) {
+        var stage = abstractedLogs[fi];
+        if (stage.parent != 0) {
+            console.log(stage.stage, stage.parent);
+            g.setEdge(stage.parent, stage.stage, {
+                style: "stroke: #f66; stroke-dasharray: 5, 5;",
+                arrowheadStyle: "fill: #f66"
+            });
+        }
+    }
+
+    g.graph().rankDir = 'LR';
+    var render = new dagreD3.render();
+    var svg = d3.select("svg"),
+        svgGroup = svg.append("g");
+
+    render(d3.select("svg g"), g);
+
+    svg.selectAll("g.node").on("click", function(id) {
+        var _node = g.node(id); 
+        console.log(_node);
+        clickNode(abstractedLogs[id-1]);
+    });
+
+    function clickNode(id) {
+        console.log(id)
+    }    
+</script>

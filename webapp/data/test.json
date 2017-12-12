@@ -1,0 +1,23 @@
+{
+    "ScenarioName": "시나리오1",
+    "AnalysisData": "csv file이름?",
+    "InteractionLogs": {},
+    "AbstractedLogs": [
+        {
+            "type": "Arrange",
+            "parameters": {
+                "x": "time",
+                "y": "count(id)",
+                "type": "top",
+                "parameters": "3"
+            }
+        },
+        {
+            "type": "Filter",
+            "parameters": {
+                "type": "MAX",
+                "parameters": "3"
+            }
+        }
+    ]
+}
