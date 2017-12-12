@@ -1,0 +1,439 @@
+<?xml version='1.0' encoding='utf-8' ?>
+
+<!-- build 10400.17.0915.2112                               -->
+<workbook original-version='10.4' source-build='10.4.0 (10400.17.0915.2112)' source-platform='win' version='10.4' xmlns:user='http://www.tableausoftware.com/xml/user'>
+  <preferences>
+    <preference name='ui.encoding.shelf.height' value='24' />
+    <preference name='ui.shelf.height' value='26' />
+  </preferences>
+  <datasources>
+    <datasource caption='d3_commit_graph' inline='true' name='federated.04hivxr1xiaver1c0vg0y0nzwgnf' version='10.4'>
+      <connection class='federated'>
+        <named-connections>
+          <named-connection caption='d3_commit_graph' name='textscan.05h0u8k16nkxeb1flq7111wqt54l'>
+            <connection class='textscan' directory='C:/Users/ytaek.kim/GoogleDrive/Lectures/17-2 InfoVis/term project' filename='d3_commit_graph.csv' password='' server='' />
+          </named-connection>
+          <named-connection caption='d3_actions' name='textscan.1dyuykm1bfcam31bdjot41g5w64d'>
+            <connection class='textscan' directory='C:/Users/ytaek.kim/GoogleDrive/Lectures/17-2 InfoVis/term project' filename='d3_actions.csv' password='' server='' />
+          </named-connection>
+        </named-connections>
+        <relation join='left' type='join'>
+          <clause type='join'>
+            <expression op='='>
+              <expression op='[d3_actions.csv].[file_id]' />
+              <expression op='[d3_files.csv].[id]' />
+            </expression>
+          </clause>
+          <relation connection='textscan.1dyuykm1bfcam31bdjot41g5w64d' name='d3_actions.csv' table='[d3_actions#csv]' type='table'>
+            <columns character-set='UTF-8' header='yes' locale='ko_KR' separator=','>
+              <column datatype='integer' name='id' ordinal='0' />
+              <column datatype='string' name='type' ordinal='1' />
+              <column datatype='integer' name='file_id' ordinal='2' />
+              <column datatype='integer' name='commit_id' ordinal='3' />
+              <column datatype='integer' name='branch_id' ordinal='4' />
+            </columns>
+          </relation>
+          <relation connection='textscan.1dyuykm1bfcam31bdjot41g5w64d' name='d3_files.csv' table='[d3_files#csv]' type='table'>
+            <columns character-set='UTF-8' header='yes' locale='ko_KR' separator=','>
+              <column datatype='integer' name='id' ordinal='0' />
+              <column datatype='string' name='file_name' ordinal='1' />
+              <column datatype='integer' name='repository_id' ordinal='2' />
+            </columns>
+          </relation>
+        </relation>
+        <cols>
+          <map key='[branch_id]' value='[d3_actions.csv].[branch_id]' />
+          <map key='[commit_id]' value='[d3_actions.csv].[commit_id]' />
+          <map key='[file_id]' value='[d3_actions.csv].[file_id]' />
+          <map key='[file_name]' value='[d3_files.csv].[file_name]' />
+          <map key='[id (d3_files.csv)]' value='[d3_files.csv].[id]' />
+          <map key='[id]' value='[d3_actions.csv].[id]' />
+          <map key='[repository_id]' value='[d3_files.csv].[repository_id]' />
+          <map key='[type]' value='[d3_actions.csv].[type]' />
+        </cols>
+        <metadata-records>
+          <metadata-record class='column'>
+            <remote-name>id</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[id]</local-name>
+            <parent-name>[d3_actions.csv]</parent-name>
+            <remote-alias>id</remote-alias>
+            <ordinal>0</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;sint64&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>type</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[type]</local-name>
+            <parent-name>[d3_actions.csv]</parent-name>
+            <remote-alias>type</remote-alias>
+            <ordinal>1</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LKO_RKR' />
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteCollation'>&quot;ko&quot;</attribute>
+              <attribute datatype='string' name='DebugRemoteMetadata (compression)'>&quot;heap&quot;</attribute>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>4294967292</attribute>
+              <attribute datatype='integer' name='DebugRemoteMetadata (storagewidth)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;str&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>file_id</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[file_id]</local-name>
+            <parent-name>[d3_actions.csv]</parent-name>
+            <remote-alias>file_id</remote-alias>
+            <ordinal>2</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;sint64&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>commit_id</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[commit_id]</local-name>
+            <parent-name>[d3_actions.csv]</parent-name>
+            <remote-alias>commit_id</remote-alias>
+            <ordinal>3</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;sint64&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>branch_id</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[branch_id]</local-name>
+            <parent-name>[d3_actions.csv]</parent-name>
+            <remote-alias>branch_id</remote-alias>
+            <ordinal>4</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;sint64&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='capability'>
+            <remote-name />
+            <remote-type>0</remote-type>
+            <parent-name>[d3_actions.csv]</parent-name>
+            <remote-alias />
+            <aggregation>Count</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='string' name='character-set'>&quot;UTF-8&quot;</attribute>
+              <attribute datatype='string' name='collation'>&quot;ko&quot;</attribute>
+              <attribute datatype='string' name='currency'>&quot;₩&quot;</attribute>
+              <attribute datatype='string' name='debit-close-char'>&quot;&quot;</attribute>
+              <attribute datatype='string' name='debit-open-char'>&quot;&quot;</attribute>
+              <attribute datatype='string' name='field-delimiter'>&quot;,&quot;</attribute>
+              <attribute datatype='string' name='header-row'>&quot;true&quot;</attribute>
+              <attribute datatype='string' name='locale'>&quot;ko_KR&quot;</attribute>
+              <attribute datatype='string' name='single-char'>&quot;&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>id</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[id (d3_files.csv)]</local-name>
+            <parent-name>[d3_files.csv]</parent-name>
+            <remote-alias>id</remote-alias>
+            <ordinal>5</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;sint64&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>file_name</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[file_name]</local-name>
+            <parent-name>[d3_files.csv]</parent-name>
+            <remote-alias>file_name</remote-alias>
+            <ordinal>6</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LKO_RKR' />
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteCollation'>&quot;ko&quot;</attribute>
+              <attribute datatype='string' name='DebugRemoteMetadata (compression)'>&quot;heap&quot;</attribute>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>4294967292</attribute>
+              <attribute datatype='integer' name='DebugRemoteMetadata (storagewidth)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;str&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>repository_id</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[repository_id]</local-name>
+            <parent-name>[d3_files.csv]</parent-name>
+            <remote-alias>repository_id</remote-alias>
+            <ordinal>7</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;sint64&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='capability'>
+            <remote-name />
+            <remote-type>0</remote-type>
+            <parent-name>[d3_files.csv]</parent-name>
+            <remote-alias />
+            <aggregation>Count</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='string' name='character-set'>&quot;UTF-8&quot;</attribute>
+              <attribute datatype='string' name='collation'>&quot;ko&quot;</attribute>
+              <attribute datatype='string' name='currency'>&quot;₩&quot;</attribute>
+              <attribute datatype='string' name='debit-close-char'>&quot;&quot;</attribute>
+              <attribute datatype='string' name='debit-open-char'>&quot;&quot;</attribute>
+              <attribute datatype='string' name='field-delimiter'>&quot;,&quot;</attribute>
+              <attribute datatype='string' name='header-row'>&quot;true&quot;</attribute>
+              <attribute datatype='string' name='locale'>&quot;ko_KR&quot;</attribute>
+              <attribute datatype='string' name='single-char'>&quot;&quot;</attribute>
+            </attributes>
+          </metadata-record>
+        </metadata-records>
+      </connection>
+      <column datatype='integer' name='[Number of Records]' role='measure' type='quantitative' user:auto-column='numrec'>
+        <calculation class='tableau' formula='1' />
+      </column>
+      <column datatype='integer' name='[branch_id]' role='dimension' type='ordinal' />
+      <column datatype='integer' name='[commit_id]' role='dimension' type='ordinal' />
+      <column datatype='integer' name='[file_id]' role='dimension' type='ordinal' />
+      <column datatype='integer' name='[id (d3_files.csv)]' role='dimension' type='ordinal' />
+      <column datatype='integer' name='[id]' role='dimension' type='ordinal' />
+      <column datatype='integer' name='[repository_id]' role='dimension' type='ordinal' />
+      <layout dim-ordering='alphabetic' dim-percentage='0.519031' measure-ordering='alphabetic' measure-percentage='0.480969' show-structure='true' />
+      <semantic-values>
+        <semantic-value key='[Country].[Name]' value='&quot;대한민국&quot;' />
+      </semantic-values>
+    </datasource>
+  </datasources>
+  <worksheets>
+    <worksheet name='시트 1'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='d3_commit_graph' name='federated.04hivxr1xiaver1c0vg0y0nzwgnf' />
+          </datasources>
+          <datasource-dependencies datasource='federated.04hivxr1xiaver1c0vg0y0nzwgnf'>
+            <column-instance column='[id]' derivation='Count' name='[cnt:id:qk]' pivot='key' type='quantitative' />
+            <column datatype='string' name='[file_name]' role='dimension' type='nominal' />
+            <column datatype='integer' name='[id]' role='dimension' type='ordinal' />
+            <column-instance column='[file_name]' derivation='None' name='[none:file_name:nk]' pivot='key' type='nominal' />
+            <column-instance column='[type]' derivation='None' name='[none:type:nk]' pivot='key' type='nominal' />
+            <column datatype='string' name='[type]' role='dimension' type='nominal' />
+          </datasource-dependencies>
+          <filter class='quantitative' column='[federated.04hivxr1xiaver1c0vg0y0nzwgnf].[cnt:id:qk]' included-values='in-range-or-null'>
+            <min>100</min>
+            <max>1254</max>
+          </filter>
+          <sort class='computed' column='[federated.04hivxr1xiaver1c0vg0y0nzwgnf].[none:file_name:nk]' direction='DESC' using='[federated.04hivxr1xiaver1c0vg0y0nzwgnf].[cnt:id:qk]' />
+          <filter class='categorical' column='[federated.04hivxr1xiaver1c0vg0y0nzwgnf].[none:type:nk]'>
+            <groupfilter function='union' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate'>
+              <groupfilter function='member' level='[none:type:nk]' member='&quot;D&quot;' />
+              <groupfilter function='member' level='[none:type:nk]' member='&quot;M&quot;' />
+            </groupfilter>
+          </filter>
+          <slices>
+            <column>[federated.04hivxr1xiaver1c0vg0y0nzwgnf].[none:type:nk]</column>
+            <column>[federated.04hivxr1xiaver1c0vg0y0nzwgnf].[cnt:id:qk]</column>
+          </slices>
+          <aggregation value='true' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+          </pane>
+        </panes>
+        <rows>[federated.04hivxr1xiaver1c0vg0y0nzwgnf].[cnt:id:qk]</rows>
+        <cols>[federated.04hivxr1xiaver1c0vg0y0nzwgnf].[none:file_name:nk]</cols>
+      </table>
+    </worksheet>
+  </worksheets>
+  <windows saved-dpi-scale-factor='1.25' source-height='30'>
+    <window class='worksheet' maximized='true' name='시트 1'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+        <edge name='right'>
+          <strip size='160'>
+            <card param='[federated.04hivxr1xiaver1c0vg0y0nzwgnf].[cnt:id:qk]' show-domain='false' show-null-ctrls='false' type='filter' />
+          </strip>
+        </edge>
+      </cards>
+      <viewpoint>
+        <highlight>
+          <color-one-way>
+            <field>[federated.04hivxr1xiaver1c0vg0y0nzwgnf].[none:commit_id:ok]</field>
+            <field>[federated.04hivxr1xiaver1c0vg0y0nzwgnf].[none:file_id:ok]</field>
+            <field>[federated.04hivxr1xiaver1c0vg0y0nzwgnf].[none:file_name:nk]</field>
+            <field>[federated.04hivxr1xiaver1c0vg0y0nzwgnf].[none:file_path:nk]</field>
+            <field>[federated.04hivxr1xiaver1c0vg0y0nzwgnf].[none:id:ok]</field>
+            <field>[federated.04hivxr1xiaver1c0vg0y0nzwgnf].[none:parent_id:ok]</field>
+            <field>[federated.04hivxr1xiaver1c0vg0y0nzwgnf].[none:type:nk]</field>
+          </color-one-way>
+        </highlight>
+      </viewpoint>
+    </window>
+  </windows>
+  <thumbnails>
+    <thumbnail height='192' name='시트 1' width='192'>
+      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
+      YII=
+    </thumbnail>
+  </thumbnails>
+</workbook>
