@@ -182,17 +182,50 @@ function dynamicallyLoadScript(url_name, fn) {
 }
 
 function makeChart(VlSpec, paneName) {
-
-    //VlSpec = InteractionList[4][0].VlSpec; // numbering 바꾸면서 stage 확인
+   // vegaLiteThumbnailSpec(VlSpec);
+    VlSpec = InteractionList[4][0].VlSpec; // numbering 바꾸면서 stage 확인
     console.log(VlSpec);
-    var opt = {
-        mode: "vega-lite",
-        actions: false
-    };
-    vegaEmbed("#" + paneName, VlSpec, opt, function(error, result) { //chartpane
-        var tooltipOption = {
-            showAllFields: true,
-        };
-        vegaTooltip.vegaLite(result.view, VlSpec, tooltipOption);
-    });
+    vegaEmbed("#" + paneName, VlSpec);
+}
+
+function vegaLiteThumbnailSpec(spec) {
+    if(spec.layer){
+        spec.width = 50;
+        spec.height = 50;
+        spec.title = null;
+        console.log(spec.layer.length);
+        if(spec.layer.length >= 2){
+            var tmp = JSON.parse(JSON.stringify(spec.layer));
+            delete spec.layer;
+            spec.layer = [tmp[0]];
+        }
+        spec.layer[0].encoding.x["axis"]= null;
+        spec.layer[0].encoding.x["scale"] = {"rangeStep" : 100000};
+        spec.layer[0].encoding.y["axis"]= null;
+    }
+    else if(spec.hconcat){
+        spec.title = null;
+        var position0 = spec.hconcat[0];
+        var position1 = spec.hconcat[1];
+        position0.width = 40, position1.width = 40;
+        position0.height = 50, position1.height = 50;
+        position0.title = null, position1.title = null;
+        if(position0.layer.length >= 2){
+            var tmp = JSON.parse(JSON.stringify(position0.layer));
+            delete position0.layer;
+            //console.log(tmp[0]);
+            position0.layer = [tmp[0]];
+        }
+        if(position1.layer.length >= 2){
+            var tmp = JSON.parse(JSON.stringify(position1.layer));
+            delete position1.layer;
+            position1.layer = [tmp[0]];
+        }
+        position0.layer[0].encoding.x["axis"]= null;
+        position0.layer[0].encoding.y["axis"]= null;
+        position1.layer[0].encoding.x["axis"]= null;
+        position1.layer[0].encoding.y["axis"]= null;
+    }
+    //console.log(spec);
+    return null;
 }
