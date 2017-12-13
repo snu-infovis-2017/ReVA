@@ -42,6 +42,7 @@ function buildVlSpec(abstractedLogs, dataFileName) {
             } else Interaction[j].VlSpec = makeVlSpec(Interaction[j - 1], Interaction[j]); //detailed steps in stages
         }
     }
+    //makeChart(InteractionList[5][2].VlSpec);
 }
 
 function makeVlSpec(parent_interaction, current_interaction) {
@@ -73,7 +74,8 @@ function makeVlSpec(parent_interaction, current_interaction) {
         position[0].encoding["color"] = {
             "field": curr.parameters.param,
             "type": curr.parameters.param_type,
-            "scale": { "scheme": curr.parameters.param_scheme }
+            "scale": { "scheme": curr.parameters.param_scheme },
+            "legend" : null
         };
     } else if (curr.interaction == "addLabel") {
         position[1] = {};
@@ -83,6 +85,9 @@ function makeVlSpec(parent_interaction, current_interaction) {
             "y": position[0].encoding.y,
             "text": { "aggregate": curr.parameters.param_function, "field": curr.parameters.param, "type": "quantitative" }
         };
+    } else if(curr.interaction == "brush"){
+        console.log(position);
+
     } else if (curr.interaction == "filterRange") {
         curr.VlSpec.data["format"] = { "parse": { "date": "utc:'%Y-%m-%d'" } };
         position[0]["transform"] = [{
@@ -106,8 +111,6 @@ function makeVlSpec(parent_interaction, current_interaction) {
         console.log(parent.VlSpec);
         var copied_chart = parent.VlSpec.title;
         curr.VlSpec.hconcat = [];
-        //curr.VlSpec.hconcat.push({"layer" : tmp});
-        //curr.VlSpec.hconcat.push({"layer" : tmp});
         curr.VlSpec.hconcat.push({"width" : hconcatWidth, "layer": tmp, "title": curr.parameters.copied });
         curr.VlSpec.hconcat.push({"width" : hconcatWidth, "layer": tmp, "title": curr.parameters.copying });
     } else if (curr.interaction == "filterDescendingTop") {
@@ -153,7 +156,8 @@ function initiateVlSpec(current_interaction) {
         "encoding": {
             "x": { "field": parameters.x, "type": parameters.x_type, "aggregate": parameters.x_function },
             "y": { "field": parameters.y, "type": parameters.y_type, "aggregate": parameters.y_function },
-            "tooltip": { "field": parameters.y, "type": parameters.y_type, "aggregate": parameters.y_function }
+            "tooltip": { "field": parameters.y, "type": parameters.y_type, "aggregate": parameters.y_function },
+            "legend" : null
         }
     });
     VlSpec.title = current_interaction.chart;
