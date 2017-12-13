@@ -18,6 +18,7 @@ function loadAnchorTree(abstractedLogs) {
         var node = g.node(v);
         // Round the corners of the nodes
         node.rx = node.ry = 5;
+        node.id = "anchorNode" + v;
     });
 
     for (var fi = 0; fi < abstractedLogs.length; fi++) {
@@ -50,7 +51,22 @@ function clickAnchor(anchor) {
     console.log("----");
     console.log(anchor.interactions);
     makeChart(anchor.interactions[anchor.interactions.length - 1].VlSpec, "chartPane");
+    highlightAnchorNode(anchor.stage);
+    highlightDetailNode(anchor.interactions[anchor.interactions.length - 1].index);
 }
+
+// highlight detailNode
+function highlightAnchorNode(nodeId) {
+    // reset
+    var svg = d3.select("#anchorTreeSvg");
+    svg.selectAll("rect")
+        .style("stroke", "#eee");
+    console.log("#anchorNode" + nodeId);
+    svg.select("#anchorNode" + nodeId)
+        .select("rect")
+        .style("stroke", "red");
+}
+
 
 
 // function buildAnchorGlyphs(anchor) {

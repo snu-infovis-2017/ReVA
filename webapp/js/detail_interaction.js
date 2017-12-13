@@ -6,13 +6,19 @@ function loadDetailInteraction(interactions) {
     interactions.forEach(function(interaction) {
         // g.setNode(stage.stage,  { label: "TOP",       class: "type-TOP" });
         console.log();
-        g.setNode(interaction.index, { label: interaction.index, style: "fill: #afa" });
+        var nodeHtml = "<div id=detailNode" + interaction.index + " style='width:100%;height:30px;float:left;'><b>" + interaction.index + "</b></div>";
+        g.setNode(interaction.index, {
+            labelType: "html",
+            label: nodeHtml,
+            style: "fill: #eee"
+        });
     });
 
     g.nodes().forEach(function(v) {
         var node = g.node(v);
         // Round the corners of the nodes
         node.rx = node.ry = 5;
+        node.id = "detailNode" + v;
     });
 
     var prevIndex = 0;
@@ -20,14 +26,13 @@ function loadDetailInteraction(interactions) {
         if (fi !== 0) {
             var interaction = interactions[fi];
             g.setEdge(prevIndex, interaction.index, {
-                style: "stroke: #f66; stroke-dasharray: 3, 3;",
-                arrowheadStyle: "fill: #f66"
+
             });
         }
         prevIndex = interactions[fi].index;
     }
 
-    g.graph().rankDir = 'LR';
+    g.graph().rankDir = 'TB';
     var render = new dagreD3.render();
     var svg = d3.select("#detailInteractionSvg");
     var svgGroup = svg.append("g");
@@ -39,11 +44,24 @@ function loadDetailInteraction(interactions) {
         for (var fi = 0; fi < interactions.length; fi++) {
             var interaction = interactions[fi];
             if (interaction.index == id) {
+                highlightDetailNode(id);
                 clickInteraction(interaction);
                 break;
             }
         }
     });
+}
+
+// highlight detailNode
+function highlightDetailNode(nodeId) {
+    // reset
+    var svg = d3.select("#detailInteractionSvg");
+    svg.selectAll("rect")
+        .style("stroke", "#eee");
+    console.log("#detailNode" + nodeId);
+    svg.select("#detailNode" + nodeId)
+        .select("rect")
+        .style("stroke", "red");
 }
 
 function clickInteraction(interaction) {
