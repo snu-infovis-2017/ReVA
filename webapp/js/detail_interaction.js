@@ -36,8 +36,13 @@ function loadDetailInteraction(interactions) {
 
     svg.selectAll("g.node").on("click", function(id) {
         var _node = g.node(id);
-        console.log(_node);
-        clickInteraction(interactions[id - 1]);
+        for (var fi = 0; fi < interactions.length; fi++) {
+            var interaction = interactions[fi];
+            if (interaction.index == id) {
+                clickInteraction(interaction);
+                break;
+            }
+        }
     });
 }
 
