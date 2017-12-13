@@ -75,7 +75,7 @@ function makeVlSpec(parent_interaction, current_interaction) {
             "field": curr.parameters.param,
             "type": curr.parameters.param_type,
             "scale": { "scheme": curr.parameters.param_scheme },
-            "legend" : null
+            "legend": null
         };
     } else if (curr.interaction == "addLabel") {
         position[1] = {};
@@ -85,7 +85,7 @@ function makeVlSpec(parent_interaction, current_interaction) {
             "y": position[0].encoding.y,
             "text": { "aggregate": curr.parameters.param_function, "field": curr.parameters.param, "type": "quantitative" }
         };
-    } else if(curr.interaction == "brush"){
+    } else if (curr.interaction == "brush") {
         console.log(position);
 
     } else if (curr.interaction == "filterRange") {
@@ -111,10 +111,10 @@ function makeVlSpec(parent_interaction, current_interaction) {
         console.log(parent.VlSpec);
         var copied_chart = parent.VlSpec.title;
         curr.VlSpec.hconcat = [];
-        curr.VlSpec.hconcat.push({"width" : hconcatWidth, "layer": tmp, "title": curr.parameters.copied });
-        curr.VlSpec.hconcat.push({"width" : hconcatWidth, "layer": tmp, "title": curr.parameters.copying });
+        curr.VlSpec.hconcat.push({ "width": hconcatWidth, "layer": tmp, "title": curr.parameters.copied });
+        curr.VlSpec.hconcat.push({ "width": hconcatWidth, "layer": tmp, "title": curr.parameters.copying });
     } else if (curr.interaction == "filterDescendingTop") {
-    
+
         position[0]["transform"] = [{
             "filter": { "field": "email", "oneOf": ["mbostock@gmail.com", "jason@jasondavies.com", "kmonisit@gmail.com"] }
         }];
@@ -157,7 +157,7 @@ function initiateVlSpec(current_interaction) {
             "x": { "field": parameters.x, "type": parameters.x_type, "aggregate": parameters.x_function },
             "y": { "field": parameters.y, "type": parameters.y_type, "aggregate": parameters.y_function },
             "tooltip": { "field": parameters.y, "type": parameters.y_type, "aggregate": parameters.y_function },
-            "legend" : null
+            "legend": null
         }
     });
     VlSpec.title = current_interaction.chart;
@@ -181,7 +181,7 @@ function dynamicallyLoadScript(url_name, fn) {
     document.head.appendChild(script);
 }
 
-function makeChart(VlSpec) {
+function makeChart(VlSpec, paneName) {
 
     //VlSpec = InteractionList[4][0].VlSpec; // numbering 바꾸면서 stage 확인
     console.log(VlSpec);
@@ -189,7 +189,7 @@ function makeChart(VlSpec) {
         mode: "vega-lite",
         actions: false
     };
-    vegaEmbed("#chartpane", VlSpec, opt, function(error, result) { //chartpane
+    vegaEmbed("#" + paneName, VlSpec, opt, function(error, result) { //chartpane
         var tooltipOption = {
             showAllFields: true,
         };
