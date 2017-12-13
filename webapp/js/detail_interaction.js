@@ -47,5 +47,5 @@ function loadDetailInteraction(interactions) {
 }
 
 function clickInteraction(interaction) {
-    makeChart(interaction.VlSpec);
+    makeChart(interaction.VlSpec, "chartPane");
 }

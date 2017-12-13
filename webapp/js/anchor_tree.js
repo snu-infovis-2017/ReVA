@@ -34,6 +34,10 @@ function loadAnchorTree(abstractedLogs) {
         svgGroup = svg.append("g");
 
     render(d3.select("#anchorTreeSvg g"), g);
+    // var thumbSpec = vegaLiteThumbnailSpec(interaction.VlSpec);
+    // makeChart(thumbSpec, "chartpane");
+
+    // add vega-lite thumbnail
 
     svg.selectAll("g.node").on("click", function(id) {
         var _node = g.node(id);
@@ -45,11 +49,23 @@ function clickAnchor(anchor) {
     loadDetailInteraction(anchor.interactions);
     console.log("----");
     console.log(anchor.interactions);
-    makeChart(anchor.interactions[anchor.interactions.length - 1].VlSpec);
+    makeChart(anchor.interactions[anchor.interactions.length - 1].VlSpec, "chartPane");
 }
 
 
-function buildAnchorGlyphs(anchor) {
-    var html;
-    return html;
-}
+// function buildAnchorGlyphs(anchor) {
+//     var html;
+//     if (chart => ) < div > < svg id = "anchorindex" > < /svg>"
+//     vega - lite thumbnail svg render
+//     return html;
+// }
+
+
+// function vegaLiteThumbnailSpec(spec) {
+//     spec.width = 50;
+//     spec.height = 40;
+//     spec.x.
+//         // remove 쓸데없는것들 (축. label 등);
+
+//     return null;
+// }
