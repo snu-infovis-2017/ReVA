@@ -13,6 +13,17 @@
     <style>
         /*@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);*/
         
+        body {
+            position: fixed;
+            top: 10;
+            bottom: 0;
+            left: 10;
+            right: 0;
+            margin: 0;
+            padding: 0;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serf;
+        }
+        
         table tr td tbody thead th {
             border: none;
             padding: 0px;
@@ -30,12 +41,23 @@
         .anchorTree {
             border: 1px;
         }
+        
+        .edgePath path {
+            stroke: #999;
+            stroke-width: 1.5px;
+            fill: #999;
+        }
+        
+        .edgeLabel text {
+            width: 50px;
+            fill: #fff;
+        }
     </style>
 </head>
 
 <body>
     <div style="width:100%" align="left" id="anchorTreePane" border=1>
-        <svg width=100% id="anchorTreeSvg" class="anchorTreePane">
+        <svg style="width:100%;height:300px;" hei id="anchorTreeSvg" class="anchorTreePane">
             <g/>
         </svg>
     </div>

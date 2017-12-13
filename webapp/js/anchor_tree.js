@@ -6,12 +6,12 @@ function loadAnchorTree(abstractedLogs) {
     abstractedLogs.forEach(function(stage) {
         // g.setNode(stage.stage,  { label: "TOP",       class: "type-TOP" });
         console.log();
-        var nodeHtml = "<b>" + stage.stage + "</b>";
+        var nodeHtml = "<div style='width:100px;height:80px;float:left;'><image width=50 src='../images/filter_stock_funnel_filters-512.png' /><b>" + stage.stage + "</b></div>";
         // var nodeHtml = buildAnchorGlyphs(stage);
         g.setNode(stage.stage, {
             labelType: "html",
             label: nodeHtml,
-            style: "fill: #afa"
+            style: "fill: #eee"
         });
     });
     g.nodes().forEach(function(v) {
@@ -24,10 +24,7 @@ function loadAnchorTree(abstractedLogs) {
         var stage = abstractedLogs[fi];
         if (stage.parent != 0) {
             console.log(stage.stage, stage.parent);
-            g.setEdge(stage.parent, stage.stage, {
-                style: "stroke: #f66; stroke-dasharray: 5, 5;",
-                arrowheadStyle: "fill: #f66"
-            });
+            g.setEdge(stage.parent, stage.stage, { width: 25 });
         }
     }
 
