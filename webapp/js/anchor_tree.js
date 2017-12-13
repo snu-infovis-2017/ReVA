@@ -6,7 +6,9 @@ function loadAnchorTree(abstractedLogs) {
     abstractedLogs.forEach(function(stage) {
         // g.setNode(stage.stage,  { label: "TOP",       class: "type-TOP" });
         console.log();
-        var nodeHtml = "<div style='width:100px;height:80px;float:left;'><image width=50 src='../images/filter_stock_funnel_filters-512.png' /><b>" + stage.stage + "</b></div>";
+        var nodeHtml = buildAnchorGlyphs(stage);
+        stage.thumbnailSvg = vegaLiteThumbnailSpec(stage.interactions[stage.interactions.length - 1].VlSpec);
+        // var nodeHtml = "<div style='width:100px;height:80px;float:left;'><image width=50 src='../images/filter_stock_funnel_filters-512.png' /><b>" + stage.stage + "</b></div>";
         // var nodeHtml = buildAnchorGlyphs(stage);
         g.setNode(stage.stage, {
             labelType: "html",
@@ -24,7 +26,6 @@ function loadAnchorTree(abstractedLogs) {
     for (var fi = 0; fi < abstractedLogs.length; fi++) {
         var stage = abstractedLogs[fi];
         if (stage.parent != 0) {
-            console.log(stage.stage, stage.parent);
             g.setEdge(stage.parent, stage.stage, { width: 25 });
         }
     }
@@ -35,10 +36,41 @@ function loadAnchorTree(abstractedLogs) {
         svgGroup = svg.append("g");
 
     render(d3.select("#anchorTreeSvg g"), g);
-    // var thumbSpec = vegaLiteThumbnailSpec(interaction.VlSpec);
-    // makeChart(thumbSpec, "chartpane");
-
+    console.log(d3.select("#nodeSvg1"));
     // add vega-lite thumbnail
+    abstractedLogs.forEach(function(stage) {
+        // stage.thumbnailSvg = stage.interactions[0].VlSpec; // deep copy
+        if (stage.existThumbnail) {
+            stage.thumbnailSvg = jQuery.extend(true, {}, stage.interactions[0].VlSpec);
+            console.log(stage.thumbnailSvg);
+            stage.thumbnailSvg.width = 100;
+            stage.thumbnailSvg.height = 100;
+            stage.thumbnailSvg.config = { "axis": null, "legend": null };
+            stage.thumbnailSvg.title = null;
+            stage.thumbnailSvg.legend = false;
+            try {
+                stage.thumbnailSvg.layer[0].encoding.x.axis = null;
+                stage.thumbnailSvg.layer[0].encoding.y.axis = null;
+            } catch (TypeError) {
+
+            }
+            console.log("nodeSvg" + stage.stage);
+
+            stage.thumbnailSvg.width = 100;
+            stage.thumbnailSvg.height = 100;
+            var opt = {
+                mode: "vega-lite",
+                actions: false,
+                renderer: 'svg'
+            };
+            vegaEmbed("#nodeSvg" + stage.stage, stage.thumbnailSvg, opt, function(error, result) { //chartpane
+                var tooltipOption = {
+                    showAllFields: true,
+                };
+                vegaTooltip.vegaLite(result.view, stage.thumbnailSvg, tooltipOption);
+            });
+        }
+    });
 
     svg.selectAll("g.node").on("click", function(id) {
         var _node = g.node(id);
@@ -48,8 +80,6 @@ function loadAnchorTree(abstractedLogs) {
 
 function clickAnchor(anchor) {
     loadDetailInteraction(anchor.interactions);
-    console.log("----");
-    console.log(anchor.interactions);
     makeChart(anchor.interactions[anchor.interactions.length - 1].VlSpec, "chartPane");
     highlightAnchorNode(anchor.stage);
     highlightDetailNode(anchor.interactions[anchor.interactions.length - 1].index);
@@ -61,27 +91,53 @@ function highlightAnchorNode(nodeId) {
     var svg = d3.select("#anchorTreeSvg");
     svg.selectAll("rect")
         .style("stroke", "#eee");
-    console.log("#anchorNode" + nodeId);
     svg.select("#anchorNode" + nodeId)
         .select("rect")
         .style("stroke", "red");
 }
 
 
+function buildAnchorGlyphs(anchor) {
+    var html = "<div style='width:100px;height:100px;float:left;'>";
+    anchorInteraction = anchor.interactions[0];
+    switch (anchorInteraction.category) {
+        case "Arrange:Chart":
+            html += "<svg width=100 height=100 id='nodeSvg" + anchor.stage + "'></svg><br/>";
+            html += "x:";
+            if (anchorInteraction.parameters.x_function !== undefined) html += "(" + anchorInteraction.parameters.x_function + ")";
+            html += anchorInteraction.parameters.x;
+            html += " y:";
+            if (anchorInteraction.parameters.y_function !== undefined) html += "(" + anchorInteraction.parameters.y_function + ")";
+            html += anchorInteraction.parameters.y;
 
-// function buildAnchorGlyphs(anchor) {
-//     var html;
-//     if (chart => ) < div > < svg id = "anchorindex" > < /svg>"
-//     vega - lite thumbnail svg render
-//     return html;
-// }
+            anchor.existThumbnail = true;
+            break;
+        case "Manipulate:Select":
+            switch (anchorInteraction.interaction) {
+                case "filterRange":
+                    html += "<image width=50 src='../images/filter_stock_funnel_filters-512.png' />"
+                    html += anchorInteraction.parameters.target;
+                    break;
+                case "filterDescendingTop":
+                    html += "<image width=50 src='../images/filter_stock_funnel_filters-512.png' />";
+                    html += "TOP " + anchorInteraction.parameters.param + " DESC";
+                    break;
+            }
+            break;
+        case "Facet:Juxtapose":
+            html += "<svg width=100 height=80 id=nodeSvg" + anchor.stage + "></svg>";
+            anchor.existThumbnail = true;
+            break;
+    }
+    html += "</div>";
+    return html;
+}
 
 
-// function vegaLiteThumbnailSpec(spec) {
-//     spec.width = 50;
-//     spec.height = 40;
-//     spec.x.
-//         // remove 쓸데없는것들 (축. label 등);
+function vegaLiteThumbnailSpec(spec) {
+    // spec.width = 50;
+    // spec.height = 40;
+    // // remove 쓸데없는것들 (축. label 등);
 
-//     return null;
-// }
+    return undefined;
+}

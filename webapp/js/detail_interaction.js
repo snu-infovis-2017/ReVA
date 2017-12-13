@@ -4,8 +4,6 @@ function loadDetailInteraction(interactions) {
         .setDefaultEdgeLabel(function() { return; });
 
     interactions.forEach(function(interaction) {
-        // g.setNode(stage.stage,  { label: "TOP",       class: "type-TOP" });
-        console.log();
         var nodeHtml = "<div id=detailNode" + interaction.index + " style='width:100%;height:30px;float:left;'><b>" + interaction.index + "</b></div>";
         g.setNode(interaction.index, {
             labelType: "html",
@@ -58,7 +56,6 @@ function highlightDetailNode(nodeId) {
     var svg = d3.select("#detailInteractionSvg");
     svg.selectAll("rect")
         .style("stroke", "#eee");
-    console.log("#detailNode" + nodeId);
     svg.select("#detailNode" + nodeId)
         .select("rect")
         .style("stroke", "red");
