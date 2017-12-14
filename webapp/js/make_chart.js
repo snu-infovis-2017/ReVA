@@ -210,11 +210,16 @@ function vegaLiteThumbnailSpec(originSpec, width, height) {
         spec.width = width;
         spec.height = height;
         spec.title = null;
-        console.log(spec.layer.length);
+        console.log(spec);
         if (spec.layer.length >= 2) {
             var tmp = JSON.parse(JSON.stringify(spec.layer));
-            delete spec.layer;
-            spec.layer = [tmp[0]];
+            if(spec.layer[1].mark == "rule"){
+                spec.layer[1].encoding.y["axis"] = null;
+            }
+            else{
+                delete spec.layer;
+                spec.layer = [tmp[0]];
+            }
         }
         spec.layer[0].encoding.x["axis"] = null;
         //spec.layer[0].encoding.x["scale"] = {"rangeStep" : 100000};
