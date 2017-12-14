@@ -182,16 +182,18 @@ function dynamicallyLoadScript(url_name, fn) {
 }
 
 function makeChart(VlSpec, paneName) {
-   // vegaLiteThumbnailSpec(VlSpec);
+    //
     //VlSpec = InteractionList[4][0].VlSpec; // numbering 바꾸면서 stage 확인
     console.log(VlSpec);
+    //test(VlSpec);
+    //vegaLiteThumbnailSpec(VlSpec);
     vegaEmbed("#" + paneName, VlSpec);
 }
-
-function vegaLiteThumbnailSpec(spec) {
+function vegaLiteThumbnailSpec(spec){
+    console.log("adf");
     if(spec.layer){
-        spec.width = 50;
-        spec.height = 50;
+        spec.width = 100;
+        spec.height = 100;
         spec.title = null;
         console.log(spec.layer.length);
         if(spec.layer.length >= 2){
@@ -200,7 +202,7 @@ function vegaLiteThumbnailSpec(spec) {
             spec.layer = [tmp[0]];
         }
         spec.layer[0].encoding.x["axis"]= null;
-        spec.layer[0].encoding.x["scale"] = {"rangeStep" : 100000};
+        //spec.layer[0].encoding.x["scale"] = {"rangeStep" : 100000};
         spec.layer[0].encoding.y["axis"]= null;
     }
     else if(spec.hconcat){
@@ -226,6 +228,5 @@ function vegaLiteThumbnailSpec(spec) {
         position1.layer[0].encoding.x["axis"]= null;
         position1.layer[0].encoding.y["axis"]= null;
     }
-    //console.log(spec);
-    return null;
 }
+
