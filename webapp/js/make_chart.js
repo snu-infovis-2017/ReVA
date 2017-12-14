@@ -20,13 +20,6 @@ function buildVlSpec(abstractedLogs, dataFileName) {
                 "data": { "url": "../data/" + dataFileName }, //data/dataFileName
                 "layer": []
             };
-
-            /////////////////exception 나중에 수정
-            if (i == 0 && j == 4) { //brush 애매해서 빼둠.
-                Interaction[4].VlSpec = Interaction[3].VlSpec;
-            }
-            //////////////////
-
             if (i == 0 && j == 0) Interaction[j].VlSpec = initiateVlSpec(Interaction[j]); //first make chart
             else if (j == 0) { //stage1을 제외한 가장 첫 stage case
                 var parent;
@@ -249,4 +242,26 @@ function vegaLiteThumbnailSpec(originSpec, width, height) {
     }
 
     return spec;
+}
+
+function editParams(interaction, type, value){
+    switch(type){
+        case "x":
+            interaction.parameters.x = value;
+            break;
+        case "x_function":
+            interaction.parameters.x_function = value;
+            break;
+        case "y":
+            interaction.parameters.y = value;
+            break;
+        case "y_function":
+            interaction.parameters.y_function = value;
+            break;
+        case "color":
+            interaction.parameters.param_scheme = value;
+        case "sort":
+            interaction.parameters.sort = value;
+    }
+    return null;
 }
