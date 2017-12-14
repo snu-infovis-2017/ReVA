@@ -141,6 +141,15 @@ function makeVlSpec(parent_interaction, current_interaction) {
                 "size": { "value": 3 }
             }
         };
+    } else if (curr.interaction == "LikeInteraction"){
+        console.log(abstractedLogs[curr.parent - 1].interactions);
+        console.log(curr);
+        abstractedLogs[curr.stage - 1].favorite = true;
+        abstractedLogs[curr.stage - 1].interactions.forEach(function(d){
+            if(d.index == curr.p_index){
+                d.favorite = true;
+            }
+        })
     }
     curr.VlSpec.title = "<" + curr.chart + ">";
     return curr.VlSpec;
