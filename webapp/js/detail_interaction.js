@@ -10,7 +10,7 @@ function loadDetailInteraction(interactions) {
         g.setNode(interaction.index, {
             labelType: "html",
             label: nodeHtml,
-            style: "fill: " + nodeBackgroundColor + ";stroke:" + nodeDefaultStrokeColor + ";stroke-width:3px"
+            style: "fill: " + (interaction.refresh ? nodeRefreshBackgroundColor : nodeBackgroundColor) + ";stroke:" + nodeDefaultStrokeColor + ";stroke-width:3px"
         });
     });
 
@@ -45,7 +45,6 @@ function loadDetailInteraction(interactions) {
         for (var fi = 0; fi < interactions.length; fi++) {
             var interaction = interactions[fi];
             if (interaction.index == id) {
-                highlightDetailNode(id);
                 clickInteraction(interaction);
                 break;
             }
@@ -67,6 +66,7 @@ function highlightDetailNode(nodeId) {
 }
 
 function clickInteraction(interaction) {
+    highlightDetailNode(interaction.index);
     makeChart(interaction.VlSpec, "chartPane");
 }
 
@@ -85,55 +85,49 @@ function buildDetailNodeHtml(interaction) {
     switch (interaction.interaction) {
         case "barchart":
             p += "x: ";
-            if (params.x_function !== undefined) p += params.x_function + "(";
-            p += params.x;
-            if (params.x_function !== undefined) p += ")";
+            p += buildFunctionLabel(params.x_function, params.x);
             p += "<br />";
             p += "y: ";
-            if (params.y_function !== undefined) p += params.y_function + "(";
-            p += params.y;
-            if (params.y_function !== undefined) p += ")";
+            p += buildFunctionLabel(params.y_function, params.y);
             break;
         case "linechart":
             p += "x: ";
-            if (params.x_function !== undefined) p += params.x_function + "(";
-            p += params.x;
-            if (params.x_function !== undefined) p += ")";
+            p += buildFunctionLabel(params.x_function, params.x);
             p += "<br />";
             p += "y: ";
-            if (params.y_function !== undefined) p += params.y_function + "(";
-            p += params.x;
-            if (params.y_function !== undefined) p += ")";
+            p += buildFunctionLabel(params.y_function, params.y);
             if (params.color !== undefined) p += "color: " + param.color.field;
             break;
         case "changeColor":
             schemes = ["category20", "category20b", "category20c"];
             p += params.param + ": <br />";
             p += buildSelectBox(schemes, "interaction" + interaction.index, params.param_scheme);
+            addChangeEvent("interaction" + interaction.index, interaction, true);
             break;
         case "orderBy":
             orders = ["ascending", "descending"];
-            if (params.param_function !== undefined) p += params.param_function + "(";
-            p += params.param;
-            if (params.param_function !== undefined) p += ")";
+            p += buildFunctionLabel(params.param_function, params.param);
             p += ": <br />";
             p += buildSelectBox(orders, "interaction" + interaction.index, params.sort);
+            addChangeEvent("interaction" + interaction.index, interaction, false);
             break;
         case "addLabel":
-            if (params.param_function !== undefined) p += params.param_function + "(";
-            p += params.param;
-            if (params.param_function !== undefined) p += ")";
+            p += buildFunctionLabel(params.param_function, params.param);
             break;
         case "filterRange":
-            if (params.target !== undefined) p += params.target + "(";
-            p += params.target_data;
-            if (params.target !== undefined) p += ")";
+            p += buildFunctionLabel(params.target, params.target_data);
             p += ": </br>";
             p += params.start + " ~ " + params.end;
             break;
         case "copyAndJuxtapose":
-            console.log(">>>", params);
             p += params.concat;
+            break;
+        case "filterTop":
+            console.log(">>>", params);
+            p += buildSelectBox(["ascending", "descending"], "interaction" + interaction.index + "_1", params.sort);
+            p += buildSelectBox([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], "interaction" + interaction.index + "_2", params.param);
+            addChangeEvent("interaction" + interaction.index + "_1", interaction, true);
+            addChangeEvent("interaction" + interaction.index + "_2", interaction, true);
             break;
     }
 
@@ -144,11 +138,29 @@ function buildDetailNodeHtml(interaction) {
 }
 
 function buildSelectBox(list, id, defaultValue) {
+    console.log(defaultValue);
     var p = "";
     p += "<select class=form-control id=" + id + ">";
     list.forEach(function(d) {
-        p += "<option " + (d == list ? "selected" : "");
+        p += "<option " + (String(d) == defaultValue ? "selected" : "");
         p += ">" + d + "</option>";
     });
+    p += "</select>";
+    return p;
+}
+
+function addChangeEvent(id, interaction, isAll) {
+    $(document).on('change', "#" + id, function() {
+        if (isAll) recoverAll(interaction);
+        else recoverCurrentDetailOnly(interaction);
+    });
+}
+
+function buildFunctionLabel(paramFunction, param) {
+    var p = "";
+    if (paramFunction !== undefined) p += paramFunction + "(";
+    p += param;
+    if (paramFunction !== undefined) p += ")";
+
     return p;
 }

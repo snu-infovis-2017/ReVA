@@ -3,6 +3,7 @@ var nodeHeight = 150;
 var thumbnailWidth = 180;
 var thumbnailHeight = 120;
 var nodeBackgroundColor = "#ffffff";
+var nodeRefreshBackgroundColor = "#fddfe9";
 var nodeDefaultStrokeColor = "#cccccc";
 
 function loadAnchorTree(abstractedLogs) {
@@ -14,10 +15,11 @@ function loadAnchorTree(abstractedLogs) {
         // g.setNode(stage.stage,  { label: "TOP",       class: "type-TOP" });
         console.log();
         var nodeHtml = buildAnchorGlyphs(stage);
+
         g.setNode(stage.stage, {
             labelType: "html",
             label: nodeHtml,
-            style: "fill: " + nodeBackgroundColor + ";stroke:" + nodeDefaultStrokeColor + ";stroke-width:3px"
+            style: "fill: " + (stage.refresh ? nodeRefreshBackgroundColor : nodeBackgroundColor) + ";stroke:" + nodeDefaultStrokeColor + ";stroke-width:3px"
         });
     });
     g.nodes().forEach(function(v) {
@@ -42,7 +44,7 @@ function loadAnchorTree(abstractedLogs) {
         svgGroup = svg.append("g");
 
     render(d3.select("#anchorTreeSvg g"), g);
-    console.log(d3.select("#nodeSvg1"));
+
     // add vega-lite thumbnail
     abstractedLogs.forEach(function(stage) {
         if (stage.existThumbnail) {
@@ -109,9 +111,9 @@ function buildAnchorGlyphs(anchor) {
                     html += "<image width=50 src='../images/filter_stock_funnel_filters-512.png' />"
                     html += anchorInteraction.parameters.target;
                     break;
-                case "filterDescendingTop":
+                case "filterTop":
                     html += "<image width=50 src='../images/filter_stock_funnel_filters-512.png' />";
-                    html += "TOP " + anchorInteraction.parameters.param + " DESC";
+                    html += "TOP " + anchorInteraction.parameters.param + "<br />" + anchorInteraction.parameters.sort.toUpperCase();
                     break;
             }
             break;

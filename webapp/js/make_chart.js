@@ -7,7 +7,7 @@ function buildVlSpec(abstractedLogs, dataJson) {
     var InteractionList = abstractedLogs.map(function(d) { return d.interactions; })
 
     for (var i in StageSummaryList) {
-        var Stages = StageSummaryList[i].split("->");;
+        var Stages = StageSummaryList[i].split("->");
         var sub_Stages = Stages.map(function(d) { return d.split(":") });
         var Stage = sub_Stages.map(function(d) { return d[2]; });
         var Interaction = InteractionList[i];
@@ -111,7 +111,7 @@ function makeVlSpec(parent_interaction, current_interaction) {
         curr.VlSpec.hconcat = [];
         curr.VlSpec.hconcat.push({ "width": hconcatWidth, "layer": tmp, "title": curr.parameters.copied });
         curr.VlSpec.hconcat.push({ "width": hconcatWidth, "layer": tmp, "title": curr.parameters.copying });
-    } else if (curr.interaction == "filterDescendingTop") {
+    } else if (curr.interaction == "filterTop") {
         var params = curr.parameters;
         // TODO - NEEDS TO BE MODIFIED
         var topArray = getTopValues(params.field, curr.VlSpec.data.values, params.target, params.target_function, params.param, params.sort);
@@ -211,7 +211,6 @@ function vegaLiteThumbnailSpec(originSpec, width, height) {
         spec.width = width;
         spec.height = height;
         spec.title = null;
-        console.log(spec);
         if (spec.layer.length >= 2) {
             var tmp = JSON.parse(JSON.stringify(spec.layer));
             if (spec.layer[1].mark == "rule") {
