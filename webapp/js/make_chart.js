@@ -71,12 +71,22 @@ function makeVlSpec(parent_interaction, current_interaction) {
             "order": curr.parameters.sort
         };
     } else if (curr.interaction == "changeColor") {
-        position[0].encoding["color"] = {
-            "field": curr.parameters.param,
-            "type": curr.parameters.param_type,
-            "scale": { "scheme": curr.parameters.param_scheme },
-            "legend": null
-        };
+        if(position[0].mark == "line"){
+            console.log("adf");
+            position[0].encoding["color"] = {
+                "field": curr.parameters.param,
+                "type": curr.parameters.param_type,
+                "scale": { "scheme": curr.parameters.param_scheme }
+            };
+        }
+        else{
+            position[0].encoding["color"] = {
+                "field": curr.parameters.param,
+                "type": curr.parameters.param_type,
+                "scale": { "scheme": curr.parameters.param_scheme },
+                "legend" : null
+            };
+        }
     } else if (curr.interaction == "addLabel") {
         position[1] = {};
         position[1].mark = { "type": "text", "align": "center", "baseline": "middle", "dy": -5 };
@@ -126,7 +136,7 @@ function makeVlSpec(parent_interaction, current_interaction) {
         position[0].mark = curr.parameters.mark;
         position[0].encoding = {
             "x": { "field": curr.parameters.x, "type": curr.parameters.x_type, "timeUnit": "year", "axis": { "format": "%Y" } },
-            "y": { "field": curr.parameters.y, "type": curr.parameters.y_type, "aggreagate": curr.parameters.y_function },
+            "y": { "field": curr.parameters.y, "type": curr.parameters.y_type, "aggregate": curr.parameters.y_function },
             //"text" : {"field" :curr.parameters.x, "type" : curr.parameters.x_type, "timeUnit": "year"}
         };
         var tmp = position[0];
