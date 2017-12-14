@@ -2,6 +2,8 @@ var nodeWidth = 200;
 var nodeHeight = 150;
 var thumbnailWidth = 180;
 var thumbnailHeight = 120;
+var nodeBackgroundColor = "#ffffff";
+var nodeDefaultStrokeColor = "#cccccc";
 
 function loadAnchorTree(abstractedLogs) {
     var g = new dagreD3.graphlib.Graph()
@@ -15,7 +17,7 @@ function loadAnchorTree(abstractedLogs) {
         g.setNode(stage.stage, {
             labelType: "html",
             label: nodeHtml,
-            style: "fill: #eee"
+            style: "fill: " + nodeBackgroundColor + ";stroke:" + nodeDefaultStrokeColor + ";stroke-width:3px"
         });
     });
     g.nodes().forEach(function(v) {
@@ -45,22 +47,6 @@ function loadAnchorTree(abstractedLogs) {
     abstractedLogs.forEach(function(stage) {
         if (stage.existThumbnail) {
             stage.thumbnailSvg = vegaLiteThumbnailSpec(stage.interactions[stage.interactions.length - 1].VlSpec, thumbnailWidth, thumbnailHeight);
-            // console.log(stage.thumbnailSvg);
-            // stage.thumbnailSvg.width = thumbnailWidth;
-            // stage.thumbnailSvg.height = thumbnailHeight;
-            // stage.thumbnailSvg.config = { "axis": null, "legend": null };
-            // stage.thumbnailSvg.title = null;
-            // stage.thumbnailSvg.legend = false;
-            try {
-                stage.thumbnailSvg.layer[0].encoding.x.axis = null;
-                stage.thumbnailSvg.layer[0].encoding.y.axis = null;
-            } catch (TypeError) {
-
-            }
-            console.log("nodeSvg" + stage.stage);
-
-            stage.thumbnailSvg.width = thumbnailWidth;
-            stage.thumbnailSvg.height = thumbnailHeight;
             var opt = {
                 mode: "vega-lite",
                 actions: false,
@@ -93,10 +79,12 @@ function highlightAnchorNode(nodeId) {
     // reset
     var svg = d3.select("#anchorTreeSvg");
     svg.selectAll("rect")
-        .style("stroke", "#eee");
+        .style("stroke", nodeDefaultStrokeColor)
+        .style("stroke-width", "3px");
     svg.select("#anchorNode" + nodeId)
         .select("rect")
-        .style("stroke", "red");
+        .style("stroke", "#ffcc00")
+        .style("stroke-width", "7px");
 }
 
 
