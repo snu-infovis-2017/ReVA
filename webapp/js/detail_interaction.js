@@ -107,15 +107,17 @@ function buildDetailNodeHtml(interaction) {
             if (params.color !== undefined) p += "color: " + param.color.field;
             break;
         case "changeColor":
+            schemes = ["category20", "category20b", "category20c"];
             p += params.param + ": <br />";
-            p += params.param_scheme;
+            p += buildSelectBox(schemes, "interaction" + interaction.index, params.param_scheme);
             break;
         case "orderBy":
+            orders = ["ascending", "descending"];
             if (params.param_function !== undefined) p += params.param_function + "(";
             p += params.param;
             if (params.param_function !== undefined) p += ")";
             p += ": <br />";
-            p += params.sort;
+            p += buildSelectBox(orders, "interaction" + interaction.index, params.sort);
             break;
         case "addLabel":
             if (params.param_function !== undefined) p += params.param_function + "(";
@@ -123,7 +125,6 @@ function buildDetailNodeHtml(interaction) {
             if (params.param_function !== undefined) p += ")";
             break;
         case "filterRange":
-            console.log(">>>", params);
             if (params.target !== undefined) p += params.target + "(";
             p += params.target_data;
             if (params.target !== undefined) p += ")";
@@ -140,4 +141,14 @@ function buildDetailNodeHtml(interaction) {
     nodeHtml += "</div>";
     nodeHtml += "</div>";
     return nodeHtml;
+}
+
+function buildSelectBox(list, id, defaultValue) {
+    var p = "";
+    p += "<select class=form-control id=" + id + ">";
+    list.forEach(function(d) {
+        p += "<option " + (d == list ? "selected" : "");
+        p += ">" + d + "</option>";
+    });
+    return p;
 }

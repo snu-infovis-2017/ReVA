@@ -2,10 +2,10 @@ var chartViewWidth = 500;
 var chartViewHeight = 400;
 var hconcatWidth = 400;
 
-function buildVlSpec(abstractedLogs, dataFileName) {
+function buildVlSpec(abstractedLogs, dataJson) {
     var StageSummaryList = abstractedLogs.map(function(d) { return d.stageSummary; });
     var InteractionList = abstractedLogs.map(function(d) { return d.interactions; })
-    console.log(abstractedLogs);
+
     for (var i in StageSummaryList) {
         var Stages = StageSummaryList[i].split("->");;
         var sub_Stages = Stages.map(function(d) { return d.split(":") });
@@ -17,7 +17,8 @@ function buildVlSpec(abstractedLogs, dataFileName) {
                 "description": "A simple bar chart with embedded data.",
                 "width": chartViewWidth,
                 "height": chartViewHeight,
-                "data": { "url": "../data/" + dataFileName }, //data/dataFileName
+                // "data": { "url": "../data/" + dataFileName }, //data/dataFileName
+                "data": { "values": dataJson },
                 "layer": []
             };
             if (i == 0 && j == 0) Interaction[j].VlSpec = initiateVlSpec(Interaction[j]); //first make chart
@@ -49,7 +50,6 @@ function makeVlSpec(parent_interaction, current_interaction) {
         parent_hconcatNum = Object.keys(parent.VlSpec.hconcat).length;
     }
     if (parent_hconcatNum == 2) {
-        console.log(parent);
         if (curr.chart == parent.VlSpec.hconcat[0].title) {
             position = curr.VlSpec.hconcat[0].layer;
         } else if (curr.chart == parent.VlSpec.hconcat[1].title) {
@@ -64,20 +64,18 @@ function makeVlSpec(parent_interaction, current_interaction) {
             "order": curr.parameters.sort
         };
     } else if (curr.interaction == "changeColor") {
-        if(position[0].mark == "line"){
-            console.log("adf");
+        if (position[0].mark == "line") {
             position[0].encoding["color"] = {
                 "field": curr.parameters.param,
                 "type": curr.parameters.param_type,
                 "scale": { "scheme": curr.parameters.param_scheme }
             };
-        }
-        else{
+        } else {
             position[0].encoding["color"] = {
                 "field": curr.parameters.param,
                 "type": curr.parameters.param_type,
                 "scale": { "scheme": curr.parameters.param_scheme },
-                "legend" : null
+                "legend": null
             };
         }
     } else if (curr.interaction == "addLabel") {
@@ -114,12 +112,15 @@ function makeVlSpec(parent_interaction, current_interaction) {
         curr.VlSpec.hconcat.push({ "width": hconcatWidth, "layer": tmp, "title": curr.parameters.copied });
         curr.VlSpec.hconcat.push({ "width": hconcatWidth, "layer": tmp, "title": curr.parameters.copying });
     } else if (curr.interaction == "filterDescendingTop") {
+        var params = curr.parameters;
+        // TODO - NEEDS TO BE MODIFIED
+        var topArray = getTopValues(params.field, curr.VlSpec.data.values, params.target, params.target_function, params.param, params.sort);
 
         position[0]["transform"] = [{
-            "filter": { "field": "email", "oneOf": ["mbostock@gmail.com", "jason@jasondavies.com", "kmonisit@gmail.com"] }
+            "filter": { "field": params.field, "oneOf": topArray }
         }];
         position[1]["transform"] = [{
-            "filter": { "field": "email", "oneOf": ["mbostock@gmail.com", "jason@jasondavies.com", "kmonisit@gmail.com"] }
+            "filter": { "field": "email", "oneOf": topArray }
         }];
 
     } else if (curr.interaction == "linechart") {
@@ -141,12 +142,10 @@ function makeVlSpec(parent_interaction, current_interaction) {
                 "size": { "value": 3 }
             }
         };
-    } else if (curr.interaction == "LikeInteraction"){
-        console.log(abstractedLogs[curr.parent - 1].interactions);
-        console.log(curr);
+    } else if (curr.interaction == "LikeInteraction") {
         abstractedLogs[curr.stage - 1].favorite = true;
-        abstractedLogs[curr.stage - 1].interactions.forEach(function(d){
-            if(d.index == curr.p_index){
+        abstractedLogs[curr.stage - 1].interactions.forEach(function(d) {
+            if (d.index == curr.p_index) {
                 d.favorite = true;
             }
         })
@@ -215,10 +214,9 @@ function vegaLiteThumbnailSpec(originSpec, width, height) {
         console.log(spec);
         if (spec.layer.length >= 2) {
             var tmp = JSON.parse(JSON.stringify(spec.layer));
-            if(spec.layer[1].mark == "rule"){
+            if (spec.layer[1].mark == "rule") {
                 spec.layer[1].encoding.y["axis"] = null;
-            }
-            else{
+            } else {
                 delete spec.layer;
                 spec.layer = [tmp[0]];
             }
@@ -253,8 +251,8 @@ function vegaLiteThumbnailSpec(originSpec, width, height) {
     return spec;
 }
 
-function editParams(interaction, type, value){
-    switch(type){
+function editParams(interaction, type, value) {
+    switch (type) {
         case "x":
             interaction.parameters.x = value;
             break;
@@ -273,4 +271,50 @@ function editParams(interaction, type, value){
             interaction.parameters.sort = value;
     }
     return null;
+}
+
+
+function getTopValues(field, dataJson, target, targetFunction, rank, orderBy) {
+    var fieldStat = {};
+
+    // TODO - no target function case
+    dataJson.forEach(function(d) {
+        if (targetFunction !== undefined) {
+            if (fieldStat[d[field]] === undefined) {
+                fieldStat[d[field]] = { "cnt": 1, "sum": Number(d[target]) };
+            } else {
+                fieldStat[d[field]].cnt++;
+                fieldStat[d[field]].sum += Number(d[target]);
+            }
+        }
+    });
+    // Create items array
+    var items = Object.keys(fieldStat).map(function(key) {
+        var value;
+        switch (targetFunction) {
+            case "sum":
+                value = fieldStat[key].sum;
+                break;
+            case "count":
+                value = fieldStat[key].cnt;
+                break;
+            case "mean":
+                value = fieldStat[key].sum / fieldStat[key].cnt;
+                break;
+        }
+        return [key, value];
+    });
+
+    // Sort the array based on the second element
+    items.sort(function(first, second) {
+        if (orderBy == "descending") return second[1] - first[1];
+        else return first[1] - second[1];
+    });
+
+    var arr = [];
+    items.slice(0, rank).forEach(function(d) {
+        arr.push(d[0]);
+    });
+
+    return arr;
 }
