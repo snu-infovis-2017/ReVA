@@ -183,7 +183,7 @@ function dynamicallyLoadScript(url_name, fn) {
 
 function makeChart(VlSpec, paneName) {
    // vegaLiteThumbnailSpec(VlSpec);
-    VlSpec = InteractionList[4][0].VlSpec; // numbering 바꾸면서 stage 확인
+    //VlSpec = InteractionList[4][0].VlSpec; // numbering 바꾸면서 stage 확인
     console.log(VlSpec);
     vegaEmbed("#" + paneName, VlSpec);
 }
