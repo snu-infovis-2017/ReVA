@@ -1,3 +1,8 @@
+var nodeWidth = 200;
+var nodeHeight = 150;
+var thumbnailWidth = 180;
+var thumbnailHeight = 120;
+
 function loadAnchorTree(abstractedLogs) {
     var g = new dagreD3.graphlib.Graph()
         .setGraph({})
@@ -7,9 +12,6 @@ function loadAnchorTree(abstractedLogs) {
         // g.setNode(stage.stage,  { label: "TOP",       class: "type-TOP" });
         console.log();
         var nodeHtml = buildAnchorGlyphs(stage);
-        stage.thumbnailSvg = vegaLiteThumbnailSpec(stage.interactions[stage.interactions.length - 1].VlSpec);
-        // var nodeHtml = "<div style='width:100px;height:80px;float:left;'><image width=50 src='../images/filter_stock_funnel_filters-512.png' /><b>" + stage.stage + "</b></div>";
-        // var nodeHtml = buildAnchorGlyphs(stage);
         g.setNode(stage.stage, {
             labelType: "html",
             label: nodeHtml,
@@ -20,6 +22,8 @@ function loadAnchorTree(abstractedLogs) {
         var node = g.node(v);
         // Round the corners of the nodes
         node.rx = node.ry = 5;
+        node.width = nodeWidth;
+        node.height = nodeHeight;
         node.id = "anchorNode" + v;
     });
 
@@ -39,15 +43,14 @@ function loadAnchorTree(abstractedLogs) {
     console.log(d3.select("#nodeSvg1"));
     // add vega-lite thumbnail
     abstractedLogs.forEach(function(stage) {
-        // stage.thumbnailSvg = stage.interactions[0].VlSpec; // deep copy
         if (stage.existThumbnail) {
-            stage.thumbnailSvg = jQuery.extend(true, {}, stage.interactions[0].VlSpec);
-            console.log(stage.thumbnailSvg);
-            stage.thumbnailSvg.width = 100;
-            stage.thumbnailSvg.height = 100;
-            stage.thumbnailSvg.config = { "axis": null, "legend": null };
-            stage.thumbnailSvg.title = null;
-            stage.thumbnailSvg.legend = false;
+            stage.thumbnailSvg = vegaLiteThumbnailSpec(stage.interactions[stage.interactions.length - 1].VlSpec, thumbnailWidth, thumbnailHeight);
+            // console.log(stage.thumbnailSvg);
+            // stage.thumbnailSvg.width = thumbnailWidth;
+            // stage.thumbnailSvg.height = thumbnailHeight;
+            // stage.thumbnailSvg.config = { "axis": null, "legend": null };
+            // stage.thumbnailSvg.title = null;
+            // stage.thumbnailSvg.legend = false;
             try {
                 stage.thumbnailSvg.layer[0].encoding.x.axis = null;
                 stage.thumbnailSvg.layer[0].encoding.y.axis = null;
@@ -56,8 +59,8 @@ function loadAnchorTree(abstractedLogs) {
             }
             console.log("nodeSvg" + stage.stage);
 
-            stage.thumbnailSvg.width = 100;
-            stage.thumbnailSvg.height = 100;
+            stage.thumbnailSvg.width = thumbnailWidth;
+            stage.thumbnailSvg.height = thumbnailHeight;
             var opt = {
                 mode: "vega-lite",
                 actions: false,
@@ -98,11 +101,11 @@ function highlightAnchorNode(nodeId) {
 
 
 function buildAnchorGlyphs(anchor) {
-    var html = "<div style='width:100px;height:100px;float:left;'>";
+    var html = "<div>";
     anchorInteraction = anchor.interactions[0];
     switch (anchorInteraction.category) {
         case "Arrange:Chart":
-            html += "<svg width=100 height=100 id='nodeSvg" + anchor.stage + "'></svg><br/>";
+            html += "<svg style='background-color: #fff;' width=" + thumbnailWidth + " height=" + thumbnailHeight + " id='nodeSvg" + anchor.stage + "'></svg><br/>";
             html += "x:";
             if (anchorInteraction.parameters.x_function !== undefined) html += "(" + anchorInteraction.parameters.x_function + ")";
             html += anchorInteraction.parameters.x;
@@ -125,19 +128,10 @@ function buildAnchorGlyphs(anchor) {
             }
             break;
         case "Facet:Juxtapose":
-            html += "<svg width=100 height=80 id=nodeSvg" + anchor.stage + "></svg>";
+            html += "<svg style='background-color: #fff;' width=" + thumbnailWidth + " height=" + thumbnailHeight + " id=nodeSvg" + anchor.stage + "></svg>";
             anchor.existThumbnail = true;
             break;
     }
     html += "</div>";
     return html;
-}
-
-
-function vegaLiteThumbnailSpec(spec) {
-    // spec.width = 50;
-    // spec.height = 40;
-    // // remove 쓸데없는것들 (축. label 등);
-
-    return undefined;
 }
