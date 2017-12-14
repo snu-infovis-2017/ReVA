@@ -96,7 +96,6 @@ function makeVlSpec(parent_interaction, current_interaction) {
             "text": { "aggregate": curr.parameters.param_function, "field": curr.parameters.param, "type": "quantitative" }
         };
     } else if (curr.interaction == "brush") {
-        console.log(position);
 
     } else if (curr.interaction == "filterRange") {
         curr.VlSpec.data["format"] = { "parse": { "date": "utc:'%Y-%m-%d'" } };
@@ -117,8 +116,6 @@ function makeVlSpec(parent_interaction, current_interaction) {
     } else if (curr.interaction == "copyAndJuxtapose") {
         var tmp = JSON.parse(JSON.stringify(curr.VlSpec.layer));
         delete curr.VlSpec.layer;
-        console.log(curr);
-        console.log(parent.VlSpec);
         var copied_chart = parent.VlSpec.title;
         curr.VlSpec.hconcat = [];
         curr.VlSpec.hconcat.push({ "width": hconcatWidth, "layer": tmp, "title": curr.parameters.copied });
@@ -146,7 +143,7 @@ function makeVlSpec(parent_interaction, current_interaction) {
         position[1] = {
             "mark": "rule",
             "encoding": {
-                "y": { "aggregate": curr.parameters.param_function, "field": curr.parameters.param, "type": curr.parameters.param_type },
+                "y": { "aggregate": "average", "field": curr.parameters.param, "type": curr.parameters.param_type },
                 "color": { "value": "red" },
                 "size": { "value": 3 }
             }
@@ -195,9 +192,16 @@ function makeChart(VlSpec, paneName) {
     //
     //VlSpec = InteractionList[4][0].VlSpec; // numbering 바꾸면서 stage 확인
     console.log(VlSpec);
-    //test(VlSpec);
-    //vegaLiteThumbnailSpec(VlSpec);
-    vegaEmbed("#" + paneName, VlSpec);
+    var opt = {
+        mode: "vega-lite",
+        actions: false
+    };
+    vegaEmbed("#" + paneName, VlSpec, opt, function(error, result) { //chartpane
+        var tooltipOption = {
+            showAllFields: true,
+        };
+        vegaTooltip.vegaLite(result.view, VlSpec, tooltipOption);
+    });
 }
 
 function vegaLiteThumbnailSpec(originSpec, width, height) {
