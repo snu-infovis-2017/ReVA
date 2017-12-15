@@ -268,6 +268,7 @@ function editParams(interaction, type, value) {
             interaction.parameters.param_scheme = value;
         case "sort":
             interaction.parameters.sort = value;
+            
     }
     return null;
 }

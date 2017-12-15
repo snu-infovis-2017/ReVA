@@ -50,6 +50,7 @@ function loadDetailInteraction(interactions) {
             }
         }
     });
+    findFavoriteNode(interactions);
 }
 
 // highlight detailNode
@@ -154,6 +155,7 @@ function addChangeEvent(id, interaction, isAll) {
         if (isAll) recoverAll(interaction);
         else recoverCurrentDetailOnly(interaction);
     });
+    console.log(interaction);
 }
 
 function buildFunctionLabel(paramFunction, param) {
@@ -161,6 +163,26 @@ function buildFunctionLabel(paramFunction, param) {
     if (paramFunction !== undefined) p += paramFunction + "(";
     p += param;
     if (paramFunction !== undefined) p += ")";
-
+    console.log(p);
     return p;
+}
+
+function findFavoriteNode(interactions){
+    interactions.forEach(function(d){
+        if(d.favorite == true){
+            console.log(d);
+            addFavoritetoNode(d.index);
+        }
+    })
+}
+function addFavoritetoNode(nodeId){
+    console.log(nodeId);
+    var svg = d3.select("#detailInteractionSvg");
+    
+    svg.select("#detailNode" + nodeId)
+        .append("circle")
+        .attr("cx", -detailNodeWidth/2)
+        .attr("cy", -25)
+        .attr("r", 10)
+        .style("fill", "red");
 }

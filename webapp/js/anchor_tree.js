@@ -67,6 +67,7 @@ function loadAnchorTree(abstractedLogs) {
         var _node = g.node(id);
         clickAnchor(abstractedLogs[id - 1]);
     });
+    findFavoriteAnchor(abstractedLogs);
 }
 
 function clickAnchor(anchor) {
@@ -124,4 +125,22 @@ function buildAnchorGlyphs(anchor) {
     }
     html += "</div>";
     return html;
+}
+
+function findFavoriteAnchor(abstractedLogs){
+    abstractedLogs.forEach(function(stage){
+        if(stage.favorite == true){
+            console.log(stage);
+            addFavoritetoAnchor(stage.stage);
+        }
+    })
+}
+function addFavoritetoAnchor(anchorId){
+    var svg = d3.select("#anchorTreeSvg");    
+    svg.select("#anchorNode" + anchorId)
+        .append("circle")
+        .attr("cx", -nodeWidth/2)
+        .attr("cy", -80)
+        .attr("r", 10)
+        .style("fill", "red");
 }
