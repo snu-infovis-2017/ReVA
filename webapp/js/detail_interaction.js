@@ -152,9 +152,15 @@ function buildSelectBox(list, id, defaultValue) {
 
 function addChangeEvent(id, paramName, interaction, isAll) {
     $(document).on('change', "#" + id, function() {
+        
         interaction.parameters[paramName] = this.value;
-        if (isAll) recoverAll(interaction);
-        else recoverCurrentDetailOnly(interaction);
+        if (isAll) {
+                        
+            recoverAll(interaction);
+        }
+        else{
+        recoverCurrentDetailOnly(interaction);
+        }
     });
 }
 

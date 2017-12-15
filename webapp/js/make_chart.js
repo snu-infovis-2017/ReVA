@@ -59,7 +59,6 @@ function makeVlSpec(parent_interaction, current_interaction) {
     }
 
     if (curr.interaction == "orderBy") {
-        console.log(curr.parameters.sort);
         position[0].encoding.x["sort"] = {
             "op": curr.parameters.param_function,
             "field": curr.parameters.param,
@@ -162,23 +161,6 @@ function makeVlSpec(parent_interaction, current_interaction) {
 
 
     } else if (curr.interaction == "LikeInteraction") {
-        abstractedLogs[curr.stage - 1].favorite = true;
-        abstractedLogs[curr.stage - 1].interactions.forEach(function(d) {
-            if (d.index == curr.p_index) {
-                d.favorite = true;
-            }
-        });
-        var i = 0;
-        abstractedLogs[curr.stage - 1].interactions.forEach(function(d) {
-            if (d.index == curr.index) {
-                var tmp = abstractedLogs[curr.stage - 1].interactions;
-                abstractedLogs[curr.stage - 1].interactions = [];
-                for (var j = 0; j < i; j++) {
-                    abstractedLogs[curr.stage - 1].interactions.push(tmp[j]);
-                }
-            }
-            i++;
-        })
     }
     curr.VlSpec.title = "<" + curr.chart + ">";
     return curr.VlSpec;
