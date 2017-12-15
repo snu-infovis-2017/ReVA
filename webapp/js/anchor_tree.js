@@ -44,7 +44,7 @@ function loadAnchorTree(abstractedLogs) {
         svgGroup = svg.append("g");
 
     render(d3.select("#anchorTreeSvg g"), g);
-
+    console.log(abstractedLogs);
     // add vega-lite thumbnail
     abstractedLogs.forEach(function(stage) {
         if (stage.existThumbnail) {
@@ -71,6 +71,7 @@ function loadAnchorTree(abstractedLogs) {
 }
 
 function clickAnchor(anchor) {
+    console.log(anchor);
     loadDetailInteraction(anchor.interactions);
     makeChart(anchor.interactions[anchor.interactions.length - 1].VlSpec, "chartPane");
     highlightAnchorNode(anchor.stage);

@@ -124,6 +124,7 @@ function makeVlSpec(parent_interaction, current_interaction) {
         }];
 
     } else if (curr.interaction == "linechart") {
+        curr.VlSpec.transform = null;
         position[0].mark = curr.parameters.mark;
         position[0].encoding = {
             "x": { "field": curr.parameters.x, "type": curr.parameters.x_type, "timeUnit": "year", "axis": { "format": "%Y" } },
@@ -134,20 +135,54 @@ function makeVlSpec(parent_interaction, current_interaction) {
         delete curr.VlSpec.layer;
         curr.VlSpec.layer = [tmp];
     } else if (curr.interaction == "addAverageLine") {
-        position[1] = {
+        console.log(curr.VlSpec);
+        var as = "count_id";
+        console.log(position[0].encoding.x.sort);
+        position[0].encoding.x.sort.field = "id";
+        position[0].encoding.x.sort.order = "ascending";
+        curr.VlSpec["transform"] = [{"aggregate": [{"op": "count", "field": "id", "as": as}],"groupby": ["email"]}];
+        
+        position[0].encoding.y.field = as;
+        position[0].encoding.y.aggregate = null;
+        
+        position[0].encoding.x.sort.field = as;
+        
+        position[1].encoding.y.field = as;
+        position[1].encoding.y.aggregate = null;
+        position[1].encoding.text.field = as;
+        position[1].encoding.text.aggregate = null;
+        
+        var rule = {
             "mark": "rule",
             "encoding": {
-                "y": { "aggregate": "average", "field": curr.parameters.param, "type": curr.parameters.param_type },
-                "color": { "value": "red" },
-                "size": { "value": 3 }
-            }
+              "y": {"field": as,"type": "quantitative", "aggregate":"mean"},
+              "color": {"value": "red"},
+              "size": {"value": 3}
+            },
+            "transform" : position[0].transform
         };
+        position.push(rule);
+        
+        console.log(position);
+    
     } else if (curr.interaction == "LikeInteraction") {
         abstractedLogs[curr.stage - 1].favorite = true;
         abstractedLogs[curr.stage - 1].interactions.forEach(function(d) {
             if (d.index == curr.p_index) {
                 d.favorite = true;
+                console.log(abstractedLogs);
             }
+        });
+        var i = 0;
+        abstractedLogs[curr.stage - 1].interactions.forEach(function(d){
+            if(d.index == curr.index){
+                var tmp = abstractedLogs[curr.stage - 1].interactions;
+                abstractedLogs[curr.stage - 1].interactions = [];
+                for(var j = 0; j < i ; j++){
+                    abstractedLogs[curr.stage - 1].interactions.push(tmp[j]);
+                }
+            } 
+            i++;
         })
     }
     curr.VlSpec.title = "<" + curr.chart + ">";
