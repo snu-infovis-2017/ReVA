@@ -105,14 +105,14 @@ function buildDetailNodeHtml(interaction) {
             schemes = ["category20", "category20b", "category20c"];
             p += params.param + ": <br />";
             p += buildSelectBox(schemes, "interaction" + interaction.index, params.param_scheme);
-            addChangeEvent("interaction" + interaction.index, "param_scheme", interaction, false);
+            addChangeEvent("interaction" + interaction.index, "param_scheme", interaction, true);
             break;
         case "orderBy":
             orders = ["ascending", "descending"];
             p += buildFunctionLabel(params.param_function, params.param);
             p += ": <br />";
             p += buildSelectBox(orders, "interaction" + interaction.index, params.sort);
-            addChangeEvent("interaction" + interaction.index, "sort", interaction, false);
+            addChangeEvent("interaction" + interaction.index, "sort", interaction, true);
             break;
         case "addLabel":
             p += buildFunctionLabel(params.param_function, params.param);
@@ -151,15 +151,17 @@ function buildSelectBox(list, id, defaultValue) {
 }
 
 function addChangeEvent(id, paramName, interaction, isAll) {
+
     $(document).on('change', "#" + id, function() {
-        
-        interaction.parameters[paramName] = this.value;
-        if (isAll) {
-                        
-            recoverAll(interaction);
-        }
-        else{
-        recoverCurrentDetailOnly(interaction);
+        if (this.value !== "" || this.value === undefined) {
+            console.log(interaction.parameters[paramName], interaction.parameters);
+            interaction.parameters[paramName] = this.value;
+            console.log(this.value, interaction.parameters);
+            if (isAll) {
+                recoverAll(interaction);
+            } else {
+                recoverCurrentDetailOnly(interaction);
+            }
         }
     });
 }

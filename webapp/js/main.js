@@ -1,11 +1,13 @@
 var abstractedLogs = [];
+var originDataJson;
 
 function loadScenario(fileName) {
     $.getJSON(fileName, function(scnJson) {
         $.getJSON("../data/" + scnJson.analysis_data_file, function(dataJson) {
+            originDataJson = dataJson;
             scnJson.IRs.forEach(function(d, i) {
                 if (abstractedLogs[d.stage - 1] === undefined) {
-                    if(d.interaction == "LikeInteraction"){
+                    if (d.interaction == "LikeInteraction") {
                         abstractedLogs[d.stage - 1].favorite = true;
                     }
                     var anchor = { "stageSummary": d.category + ":" + d.interaction, interactions: [d] };
@@ -17,18 +19,17 @@ function loadScenario(fileName) {
                     anchor.refresh = false;
                     anchor.favorite = false;
                 } else {
-                    if(d.interaction == "LikeInteraction"){
+                    if (d.interaction == "LikeInteraction") {
                         abstractedLogs[d.stage - 1].favorite = true;
-                        abstractedLogs[d.stage - 1].interactions.forEach(function(d){
-                            if(d.index == i) d.favorite = true;
+                        abstractedLogs[d.stage - 1].interactions.forEach(function(d) {
+                            if (d.index == i) d.favorite = true;
                         });
-                    }
-                    else{
+                    } else {
                         d.favorite = false;
                         abstractedLogs[d.stage - 1].interactions.push(d);
                         abstractedLogs[d.stage - 1].stageSummary += "->" + d.category + ":" + d.interaction;
                     }
-  
+
                 }
             });
             buildVlSpec(abstractedLogs, dataJson);
@@ -61,6 +62,7 @@ function recoverAll(interaction) {
         }
     }
 
+    buildVlSpec(abstractedLogs, originDataJson);
     loadAnchorTree(abstractedLogs);
     clickAnchor(abstractedLogs[interaction.stage - 1]);
     clickInteraction(interaction);
