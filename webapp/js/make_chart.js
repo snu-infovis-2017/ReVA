@@ -250,30 +250,6 @@ function vegaLiteThumbnailSpec(originSpec, width, height) {
     return spec;
 }
 
-function editParams(interaction, type, value) {
-    switch (type) {
-        case "x":
-            interaction.parameters.x = value;
-            break;
-        case "x_function":
-            interaction.parameters.x_function = value;
-            break;
-        case "y":
-            interaction.parameters.y = value;
-            break;
-        case "y_function":
-            interaction.parameters.y_function = value;
-            break;
-        case "color":
-            interaction.parameters.param_scheme = value;
-        case "sort":
-            interaction.parameters.sort = value;
-            
-    }
-    return null;
-}
-
-
 function getTopValues(field, dataJson, target, targetFunction, rank, orderBy) {
     var fieldStat = {};
 

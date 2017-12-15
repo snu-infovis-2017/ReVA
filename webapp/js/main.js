@@ -3,6 +3,7 @@ var abstractedLogs = [];
 function loadScenario(fileName) {
     $.getJSON(fileName, function(scnJson) {
         $.getJSON("../data/" + scnJson.analysis_data_file, function(dataJson) {
+            abstractedLogs.data = dataJson;
             scnJson.IRs.forEach(function(d, i) {
                 if (abstractedLogs[d.stage - 1] === undefined) {
                     var anchor = { "stageSummary": d.category + ":" + d.interaction, interactions: [d] };
@@ -43,16 +44,45 @@ function recoverAll(interaction) {
     currentStage.refresh = true;
     var parentStageIndex = interaction.stage;
     for (var fi = interaction.stage; fi < abstractedLogs.length; fi++) {
-        if (abstractedLogs[fi].parentStage.refresh === true) {
+        if (abstractedLogs[fi].parentStage.refresh) {
             abstractedLogs[fi].refresh = true;
             abstractedLogs[fi].interactions.forEach(function(d) { d.refresh = true; });
         }
     }
 
+    buildVlSpec(abstractedLogs, abstractedLogs.data);
     loadAnchorTree(abstractedLogs);
     clickAnchor(abstractedLogs[interaction.stage - 1]);
     clickInteraction(interaction);
 }
+
+// function rebuildAllVlSpec() {
+//     var interactionMap = {};
+//     abstractedLogs.forEach(function(anchor, i) {
+//         anchor.interactions.forEach(function(interaction) {
+//             interactionMap[interaction.index] = interaction;
+//         });
+//     });
+
+//     abstractedLogs.forEach(function(anchor) {
+//         anchor.interactions.forEach(function(interaction) {
+//             if (interaction.refresh) {
+//                 interaction.VlSpec = makeVlSpec(interactionMap[interaction.parent], interaction);
+//                 console.log("redraw", interaction);
+//             }
+//         });
+//     });
+// }
+
+function resetAllRefresh() {
+    abstractedLogs.forEach(function(anchor) {
+        anchor.refresh = false;
+        anchor.interactions.forEach(function(interaction) {
+            interaction.refresh = false;
+        });
+    });
+}
+
 
 
 loadScenario("../data/scn1.json");

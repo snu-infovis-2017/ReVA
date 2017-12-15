@@ -103,14 +103,14 @@ function buildDetailNodeHtml(interaction) {
             schemes = ["category20", "category20b", "category20c"];
             p += params.param + ": <br />";
             p += buildSelectBox(schemes, "interaction" + interaction.index, params.param_scheme);
-            addChangeEvent("interaction" + interaction.index, interaction, true);
+            addChangeEvent("interaction" + interaction.index, "param_scheme", interaction, true);
             break;
         case "orderBy":
             orders = ["ascending", "descending"];
             p += buildFunctionLabel(params.param_function, params.param);
             p += ": <br />";
             p += buildSelectBox(orders, "interaction" + interaction.index, params.sort);
-            addChangeEvent("interaction" + interaction.index, interaction, false);
+            addChangeEvent("interaction" + interaction.index, "sort", interaction, false);
             break;
         case "addLabel":
             p += buildFunctionLabel(params.param_function, params.param);
@@ -127,8 +127,8 @@ function buildDetailNodeHtml(interaction) {
             console.log(">>>", params);
             p += buildSelectBox(["ascending", "descending"], "interaction" + interaction.index + "_1", params.sort);
             p += buildSelectBox([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], "interaction" + interaction.index + "_2", params.param);
-            addChangeEvent("interaction" + interaction.index + "_1", interaction, true);
-            addChangeEvent("interaction" + interaction.index + "_2", interaction, true);
+            addChangeEvent("interaction" + interaction.index + "_1", "sort", interaction, true);
+            addChangeEvent("interaction" + interaction.index + "_2", "param", interaction, true);
             break;
     }
 
@@ -139,7 +139,6 @@ function buildDetailNodeHtml(interaction) {
 }
 
 function buildSelectBox(list, id, defaultValue) {
-    console.log(defaultValue);
     var p = "";
     p += "<select class=form-control id=" + id + ">";
     list.forEach(function(d) {
@@ -150,8 +149,9 @@ function buildSelectBox(list, id, defaultValue) {
     return p;
 }
 
-function addChangeEvent(id, interaction, isAll) {
+function addChangeEvent(id, paramName, interaction, isAll) {
     $(document).on('change', "#" + id, function() {
+        interaction.parameters[paramName] = this.value;
         if (isAll) recoverAll(interaction);
         else recoverCurrentDetailOnly(interaction);
     });
@@ -167,21 +167,22 @@ function buildFunctionLabel(paramFunction, param) {
     return p;
 }
 
-function findFavoriteNode(interactions){
-    interactions.forEach(function(d){
-        if(d.favorite == true){
+function findFavoriteNode(interactions) {
+    interactions.forEach(function(d) {
+        if (d.favorite == true) {
             console.log(d);
             addFavoritetoNode(d.index);
         }
     })
 }
-function addFavoritetoNode(nodeId){
+
+function addFavoritetoNode(nodeId) {
     console.log(nodeId);
     var svg = d3.select("#detailInteractionSvg");
-    
+
     svg.select("#detailNode" + nodeId)
         .append("circle")
-        .attr("cx", -detailNodeWidth/2)
+        .attr("cx", -detailNodeWidth / 2)
         .attr("cy", -25)
         .attr("r", 10)
         .style("fill", "red");
