@@ -142,6 +142,7 @@ function makeVlSpec(parent_interaction, current_interaction) {
         position[0].encoding.y.aggregate = null;
         ///////
         position[0].encoding.x.sort.field = as;
+        position[0].encoding.x.sort.op = "sum";
         ///////
         position[1].encoding.y.field = as;
         position[1].encoding.y.aggregate = null;
@@ -176,7 +177,6 @@ function initiateVlSpec(current_interaction) {
         "encoding": {
             "x": { "field": parameters.x, "type": parameters.x_type, "aggregate": parameters.x_function },
             "y": { "field": parameters.y, "type": parameters.y_type, "aggregate": parameters.y_function },
-            "tooltip": { "field": parameters.y, "type": parameters.y_type, "aggregate": parameters.y_function },
             "legend": null
         }
     });

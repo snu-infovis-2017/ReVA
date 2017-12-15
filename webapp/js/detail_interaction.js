@@ -68,6 +68,11 @@ function highlightDetailNode(nodeId) {
 var aaa = 0;
 
 function clickInteraction(interaction) {
+    toastr.options = {
+        "positionClass": "toast-top-center"
+    };
+    toastr.success(interaction.interaction);
+
     console.log(interaction.VlSpec, aaa++);
     highlightDetailNode(interaction.index);
     makeChart(interaction.VlSpec, "chartPane");
