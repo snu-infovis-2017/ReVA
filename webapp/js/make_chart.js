@@ -12,6 +12,7 @@ function buildVlSpec(abstractedLogs, dataJson) {
         var Stage = sub_Stages.map(function(d) { return d[2]; });
         var Interaction = InteractionList[i];
         for (var j in Stage) {
+            console.log(j, Interaction[j], InteractionList);
             Interaction[j].VlSpec = {
                 "$schema": "https://vega.github.io/schema/vega-lite/v2.json",
                 "description": "A simple bar chart with embedded data.",
@@ -58,6 +59,7 @@ function makeVlSpec(parent_interaction, current_interaction) {
     }
 
     if (curr.interaction == "orderBy") {
+        console.log(curr.parameters.sort);
         position[0].encoding.x["sort"] = {
             "op": curr.parameters.param_function,
             "field": curr.parameters.param,
@@ -124,6 +126,7 @@ function makeVlSpec(parent_interaction, current_interaction) {
         }];
 
     } else if (curr.interaction == "linechart") {
+        curr.VlSpec.transform = null;
         position[0].mark = curr.parameters.mark;
         position[0].encoding = {
             "x": { "field": curr.parameters.x, "type": curr.parameters.x_type, "timeUnit": "year", "axis": { "format": "%Y" } },
@@ -134,20 +137,47 @@ function makeVlSpec(parent_interaction, current_interaction) {
         delete curr.VlSpec.layer;
         curr.VlSpec.layer = [tmp];
     } else if (curr.interaction == "addAverageLine") {
-        position[1] = {
+        var as = "count_id";
+        curr.VlSpec["transform"] = [{ "aggregate": [{ "op": "count", "field": "id", "as": as }], "groupby": ["email"] }];
+        position[0].encoding.y.field = as;
+        position[0].encoding.y.aggregate = null;
+        ///////
+        position[0].encoding.x.sort.field = as;
+        ///////
+        position[1].encoding.y.field = as;
+        position[1].encoding.y.aggregate = null;
+        position[1].encoding.text.field = as;
+        position[1].encoding.text.aggregate = null;
+
+        var rule = {
             "mark": "rule",
             "encoding": {
-                "y": { "aggregate": "average", "field": curr.parameters.param, "type": curr.parameters.param_type },
+                "y": { "field": as, "type": "quantitative", "aggregate": "mean" },
                 "color": { "value": "red" },
                 "size": { "value": 3 }
-            }
+            },
+            "transform": position[0].transform
         };
+        position.push(rule);
+
+
     } else if (curr.interaction == "LikeInteraction") {
         abstractedLogs[curr.stage - 1].favorite = true;
         abstractedLogs[curr.stage - 1].interactions.forEach(function(d) {
             if (d.index == curr.p_index) {
                 d.favorite = true;
             }
+        });
+        var i = 0;
+        abstractedLogs[curr.stage - 1].interactions.forEach(function(d) {
+            if (d.index == curr.index) {
+                var tmp = abstractedLogs[curr.stage - 1].interactions;
+                abstractedLogs[curr.stage - 1].interactions = [];
+                for (var j = 0; j < i; j++) {
+                    abstractedLogs[curr.stage - 1].interactions.push(tmp[j]);
+                }
+            }
+            i++;
         })
     }
     curr.VlSpec.title = "<" + curr.chart + ">";
@@ -192,7 +222,6 @@ function dynamicallyLoadScript(url_name, fn) {
 function makeChart(VlSpec, paneName) {
     //
     //VlSpec = InteractionList[4][0].VlSpec; // numbering 바꾸면서 stage 확인
-    console.log(VlSpec);
     var opt = {
         mode: "vega-lite",
         actions: false
@@ -233,7 +262,6 @@ function vegaLiteThumbnailSpec(originSpec, width, height) {
         if (position0.layer.length >= 2) {
             var tmp = JSON.parse(JSON.stringify(position0.layer));
             delete position0.layer;
-            //console.log(tmp[0]);
             position0.layer = [tmp[0]];
         }
         if (position1.layer.length >= 2) {

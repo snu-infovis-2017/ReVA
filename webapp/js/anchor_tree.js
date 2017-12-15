@@ -13,7 +13,6 @@ function loadAnchorTree(abstractedLogs) {
 
     abstractedLogs.forEach(function(stage) {
         // g.setNode(stage.stage,  { label: "TOP",       class: "type-TOP" });
-        console.log();
         var nodeHtml = buildAnchorGlyphs(stage);
 
         g.setNode(stage.stage, {
@@ -44,7 +43,6 @@ function loadAnchorTree(abstractedLogs) {
         svgGroup = svg.append("g");
 
     render(d3.select("#anchorTreeSvg g"), g);
-
     // add vega-lite thumbnail
     abstractedLogs.forEach(function(stage) {
         if (stage.existThumbnail) {
@@ -130,7 +128,6 @@ function buildAnchorGlyphs(anchor) {
 function findFavoriteAnchor(abstractedLogs){
     abstractedLogs.forEach(function(stage){
         if(stage.favorite == true){
-            console.log(stage);
             addFavoritetoAnchor(stage.stage);
         }
     })

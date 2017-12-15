@@ -65,8 +65,10 @@ function highlightDetailNode(nodeId) {
         .style("stroke", "#ffcc00")
         .style("stroke-width", "3px");
 }
+var aaa = 0;
 
 function clickInteraction(interaction) {
+    console.log(interaction.VlSpec, aaa++);
     highlightDetailNode(interaction.index);
     makeChart(interaction.VlSpec, "chartPane");
 }
@@ -103,7 +105,7 @@ function buildDetailNodeHtml(interaction) {
             schemes = ["category20", "category20b", "category20c"];
             p += params.param + ": <br />";
             p += buildSelectBox(schemes, "interaction" + interaction.index, params.param_scheme);
-            addChangeEvent("interaction" + interaction.index, "param_scheme", interaction, true);
+            addChangeEvent("interaction" + interaction.index, "param_scheme", interaction, false);
             break;
         case "orderBy":
             orders = ["ascending", "descending"];
@@ -124,7 +126,6 @@ function buildDetailNodeHtml(interaction) {
             p += params.concat;
             break;
         case "filterTop":
-            console.log(">>>", params);
             p += buildSelectBox(["ascending", "descending"], "interaction" + interaction.index + "_1", params.sort);
             p += buildSelectBox([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], "interaction" + interaction.index + "_2", params.param);
             addChangeEvent("interaction" + interaction.index + "_1", "sort", interaction, true);
@@ -155,7 +156,6 @@ function addChangeEvent(id, paramName, interaction, isAll) {
         if (isAll) recoverAll(interaction);
         else recoverCurrentDetailOnly(interaction);
     });
-    console.log(interaction);
 }
 
 function buildFunctionLabel(paramFunction, param) {
@@ -163,21 +163,18 @@ function buildFunctionLabel(paramFunction, param) {
     if (paramFunction !== undefined) p += paramFunction + "(";
     p += param;
     if (paramFunction !== undefined) p += ")";
-    console.log(p);
     return p;
 }
 
 function findFavoriteNode(interactions) {
     interactions.forEach(function(d) {
         if (d.favorite == true) {
-            console.log(d);
             addFavoritetoNode(d.index);
         }
     })
 }
 
 function addFavoritetoNode(nodeId) {
-    console.log(nodeId);
     var svg = d3.select("#detailInteractionSvg");
 
     svg.select("#detailNode" + nodeId)

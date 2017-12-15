@@ -28,6 +28,7 @@ function loadScenario(fileName) {
 
 function recoverCurrentDetailOnly(interaction) {
     interaction.refresh = true;
+    buildVlSpec(abstractedLogs, abstractedLogs.data);
     clickAnchor(abstractedLogs[interaction.stage - 1]);
     clickInteraction(interaction);
 }
@@ -82,7 +83,5 @@ function resetAllRefresh() {
         });
     });
 }
-
-
 
 loadScenario("../data/scn1.json");
