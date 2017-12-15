@@ -135,18 +135,13 @@ function makeVlSpec(parent_interaction, current_interaction) {
         delete curr.VlSpec.layer;
         curr.VlSpec.layer = [tmp];
     } else if (curr.interaction == "addAverageLine") {
-        console.log(curr.VlSpec);
         var as = "count_id";
-        console.log(position[0].encoding.x.sort);
-        position[0].encoding.x.sort.field = "id";
-        position[0].encoding.x.sort.order = "ascending";
         curr.VlSpec["transform"] = [{"aggregate": [{"op": "count", "field": "id", "as": as}],"groupby": ["email"]}];
-        
         position[0].encoding.y.field = as;
         position[0].encoding.y.aggregate = null;
-        
+        ///////
         position[0].encoding.x.sort.field = as;
-        
+        ///////
         position[1].encoding.y.field = as;
         position[1].encoding.y.aggregate = null;
         position[1].encoding.text.field = as;
@@ -163,14 +158,12 @@ function makeVlSpec(parent_interaction, current_interaction) {
         };
         position.push(rule);
         
-        console.log(position);
     
     } else if (curr.interaction == "LikeInteraction") {
         abstractedLogs[curr.stage - 1].favorite = true;
         abstractedLogs[curr.stage - 1].interactions.forEach(function(d) {
             if (d.index == curr.p_index) {
                 d.favorite = true;
-                console.log(abstractedLogs);
             }
         });
         var i = 0;
@@ -227,7 +220,6 @@ function dynamicallyLoadScript(url_name, fn) {
 function makeChart(VlSpec, paneName) {
     //
     //VlSpec = InteractionList[4][0].VlSpec; // numbering 바꾸면서 stage 확인
-    console.log(VlSpec);
     var opt = {
         mode: "vega-lite",
         actions: false
@@ -268,7 +260,6 @@ function vegaLiteThumbnailSpec(originSpec, width, height) {
         if (position0.layer.length >= 2) {
             var tmp = JSON.parse(JSON.stringify(position0.layer));
             delete position0.layer;
-            //console.log(tmp[0]);
             position0.layer = [tmp[0]];
         }
         if (position1.layer.length >= 2) {
