@@ -1,4 +1,4 @@
-var chartViewWidth = 500;
+var chartViewWidth = 700;
 var chartViewHeight = 400;
 var hconcatWidth = 400;
 
@@ -136,6 +136,7 @@ function makeVlSpec(parent_interaction, current_interaction) {
         delete curr.VlSpec.layer;
         curr.VlSpec.layer = [tmp];
     } else if (curr.interaction == "addAverageLine") {
+        /*
         var as = "count_id";
         curr.VlSpec["transform"] = [{ "aggregate": [{ "op": "count", "field": "id", "as": as }], "groupby": ["email"] }];
         position[0].encoding.y.field = as;
@@ -159,11 +160,11 @@ function makeVlSpec(parent_interaction, current_interaction) {
             "transform": position[0].transform
         };
         position.push(rule);
-
+        */
 
     } else if (curr.interaction == "LikeInteraction") {
     }
-    curr.VlSpec.title = "<" + curr.chart + ">";
+    curr.VlSpec.title = curr.chart;
     return curr.VlSpec;
 }
 

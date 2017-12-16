@@ -1,4 +1,4 @@
-var detailNodeWidth = 275;
+var detailNodeWidth = 350;
 
 function loadDetailInteraction(interactions) {
     var g = new dagreD3.graphlib.Graph()
@@ -62,7 +62,7 @@ function highlightDetailNode(nodeId) {
         .style("stroke-width", "1px");
     svg.select("#detailNode" + nodeId)
         .select("rect")
-        .style("stroke", "#ffcc00")
+        .style("stroke", "#ab3e16")
         .style("stroke-width", "3px");
 }
 var aaa = 0;
@@ -203,11 +203,19 @@ function findFavoriteNode(interactions) {
 
 function addFavoritetoNode(nodeId) {
     var svg = d3.select("#detailInteractionSvg");
-
+    svg.select("#detailNode" + nodeId)
+    .append("svg:image")
+    .attr("x", -detailNodeWidth / 2 - 10)
+    .attr("y", -40)
+    .attr("width", 40)
+    .attr("height", 40)
+    .attr("xlink:href", "./images/star2.png")
+/*
     svg.select("#detailNode" + nodeId)
         .append("circle")
         .attr("cx", -detailNodeWidth / 2)
         .attr("cy", -25)
         .attr("r", 10)
         .style("fill", "red");
+        */
 }

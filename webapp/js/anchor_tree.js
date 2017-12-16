@@ -2,8 +2,8 @@ var nodeWidth = 200;
 var nodeHeight = 150;
 var thumbnailWidth = 180;
 var thumbnailHeight = 120;
-var nodeBackgroundColor = "#ffffff";
-var nodeRefreshBackgroundColor = "#fddfe9";
+var nodeBackgroundColor = "#f8f3e6";
+var nodeRefreshBackgroundColor = "#e9c77b";
 var nodeDefaultStrokeColor = "#cccccc";
 
 function loadAnchorTree(abstractedLogs) {
@@ -18,7 +18,7 @@ function loadAnchorTree(abstractedLogs) {
         g.setNode(stage.stage, {
             labelType: "html",
             label: nodeHtml,
-            style: "fill: " + (stage.refresh ? nodeRefreshBackgroundColor : nodeBackgroundColor) + ";stroke:" + nodeDefaultStrokeColor + ";stroke-width:3px"
+            style: "fill: " + (stage.refresh ? nodeRefreshBackgroundColor : nodeBackgroundColor)
         });
     });
     g.nodes().forEach(function(v) {
@@ -80,11 +80,12 @@ function highlightAnchorNode(nodeId) {
     // reset
     var svg = d3.select("#anchorTreeSvg");
     svg.selectAll("rect")
-        .style("stroke", nodeDefaultStrokeColor)
+        .style("stroke", nodeBackgroundColor)
         .style("stroke-width", "3px");
+
     svg.select("#anchorNode" + nodeId)
         .select("rect")
-        .style("stroke", "#ffcc00")
+        .style("stroke", "#ab3e16")
         .style("stroke-width", "7px");
 }
 
@@ -107,12 +108,12 @@ function buildAnchorGlyphs(anchor) {
         case "Manipulate:Select":
             switch (anchorInteraction.interaction) {
                 case "filterRange":
-                    html += "<image width=50 src='../images/filter_stock_funnel_filters-512.png' />"
-                    html += anchorInteraction.parameters.target;
+                    html += "<image width=70 src='../images/filter_icon.png' />"
+                    html += anchorInteraction.parameters.target.toUpperCase();
                     break;
                 case "filterTop":
-                    html += "<image width=50 src='../images/filter_stock_funnel_filters-512.png' />";
-                    html += "TOP " + anchorInteraction.parameters.param + "<br />" + anchorInteraction.parameters.sort.toUpperCase();
+                    html += "<image width=70 src='../images/filter_icon.png' />";
+                    html += "TOP " + anchorInteraction.parameters.param.toUpperCase() + "<br />" + "<br />" + anchorInteraction.parameters.sort.toUpperCase();
                     break;
             }
             break;
@@ -133,11 +134,20 @@ function findFavoriteAnchor(abstractedLogs){
     })
 }
 function addFavoritetoAnchor(anchorId){
-    var svg = d3.select("#anchorTreeSvg");    
+    var svg = d3.select("#anchorTreeSvg"); 
+    svg.select("#anchorNode" + anchorId)
+    .append("svg:image")
+    .attr("x", -nodeWidth / 2 - 20)
+    .attr("y", -95)
+    .attr("width", 40)
+    .attr("height", 40)
+    .attr("xlink:href", "./images/star2.png")
+    /*   
     svg.select("#anchorNode" + anchorId)
         .append("circle")
         .attr("cx", -nodeWidth/2)
         .attr("cy", -80)
         .attr("r", 10)
         .style("fill", "red");
+        */
 }
