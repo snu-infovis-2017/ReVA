@@ -173,9 +173,7 @@ function addChangeEvent(id, paramName, interaction, isAll) {
 
     $(document).on('change', "#" + id, function() {
         if (this.value !== "" || this.value === undefined) {
-            console.log(interaction.parameters[paramName], interaction.parameters);
             interaction.parameters[paramName] = this.value;
-            console.log(this.value, interaction.parameters);
             if (isAll) {
                 recoverAll(interaction);
             } else {
@@ -204,18 +202,18 @@ function findFavoriteNode(interactions) {
 function addFavoritetoNode(nodeId) {
     var svg = d3.select("#detailInteractionSvg");
     svg.select("#detailNode" + nodeId)
-    .append("svg:image")
-    .attr("x", -detailNodeWidth / 2 - 10)
-    .attr("y", -40)
-    .attr("width", 40)
-    .attr("height", 40)
-    .attr("xlink:href", "./images/star2.png")
-/*
-    svg.select("#detailNode" + nodeId)
-        .append("circle")
-        .attr("cx", -detailNodeWidth / 2)
-        .attr("cy", -25)
-        .attr("r", 10)
-        .style("fill", "red");
-        */
+        .append("svg:image")
+        .attr("x", -detailNodeWidth / 2 - 10)
+        .attr("y", -40)
+        .attr("width", 40)
+        .attr("height", 40)
+        .attr("xlink:href", "./images/star2.png")
+        /*
+            svg.select("#detailNode" + nodeId)
+                .append("circle")
+                .attr("cx", -detailNodeWidth / 2)
+                .attr("cy", -25)
+                .attr("r", 10)
+                .style("fill", "red");
+                */
 }

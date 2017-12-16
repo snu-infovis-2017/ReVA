@@ -1,41 +1,48 @@
 var abstractedLogs = [];
 var originDataJson;
 
-function loadScenario(fileName) {
-    $.getJSON(fileName, function(scnJson) {
-        $.getJSON("../data/" + scnJson.analysis_data_file, function(dataJson) {
-            originDataJson = dataJson;
-            scnJson.IRs.forEach(function(d, i) {
-                if (abstractedLogs[d.stage - 1] === undefined) {
-                    if (d.interaction == "LikeInteraction") {
-                        abstractedLogs[d.stage - 1].favorite = true;
-                    }
-                    var anchor = { "stageSummary": d.category + ":" + d.interaction, interactions: [d] };
-                    anchor.interactions[0].favorite = false;
-                    abstractedLogs[d.stage - 1] = anchor;
-                    anchor.stage = d.stage;
-                    anchor.parent = d.parent;
-                    anchor.parentStage = abstractedLogs[d.parent - 1];
-                    anchor.refresh = false;
-                    anchor.favorite = false;
-                } else {
-                    if (d.interaction == "LikeInteraction") {
-                        abstractedLogs[d.stage - 1].favorite = true;
-                        abstractedLogs[d.stage - 1].interactions.forEach(function(d) {
-                            if (d.index == i) d.favorite = true;
-                        });
+function loadScenario(fileName, dataFileName) {
+    if (dataFileName === undefined) {
+        $.getJSON(fileName, function(scnJson) {
+            $.getJSON("../data/" + scnJson.analysis_data_file, function(dataJson) {
+                originDataJson = dataJson;
+                scnJson.IRs.forEach(function(d, i) {
+                    if (abstractedLogs[d.stage - 1] === undefined) {
+                        if (d.interaction == "LikeInteraction") {
+                            abstractedLogs[d.stage - 1].favorite = true;
+                        }
+                        var anchor = { "stageSummary": d.category + ":" + d.interaction, interactions: [d] };
+                        anchor.interactions[0].favorite = false;
+                        abstractedLogs[d.stage - 1] = anchor;
+                        anchor.stage = d.stage;
+                        anchor.parent = d.parent;
+                        anchor.parentStage = abstractedLogs[d.parent - 1];
+                        anchor.refresh = false;
+                        anchor.favorite = false;
                     } else {
-                        d.favorite = false;
-                        abstractedLogs[d.stage - 1].interactions.push(d);
-                        abstractedLogs[d.stage - 1].stageSummary += "->" + d.category + ":" + d.interaction;
+                        if (d.interaction == "LikeInteraction") {
+                            abstractedLogs[d.stage - 1].favorite = true;
+                            abstractedLogs[d.stage - 1].interactions.forEach(function(d) {
+                                if (d.index == i) d.favorite = true;
+                            });
+                        } else {
+                            d.favorite = false;
+                            abstractedLogs[d.stage - 1].interactions.push(d);
+                            abstractedLogs[d.stage - 1].stageSummary += "->" + d.category + ":" + d.interaction;
+                        }
                     }
-
-                }
+                });
+                buildVlSpec(abstractedLogs, dataJson);
+                loadAnchorTree(abstractedLogs);
             });
+        });
+    } else {
+        $.getJSON("../data/" + dataFileName, function(dataJson) {
+            originDataJson = dataJson;
             buildVlSpec(abstractedLogs, dataJson);
             loadAnchorTree(abstractedLogs);
         });
-    });
+    }
 }
 
 function recoverCurrentDetailOnly(interaction) {
