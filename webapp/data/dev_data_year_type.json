@@ -1,0 +1,10 @@
+{
+    "id(d3_people.csv)": "quantitative",
+    "name": "nominal",
+    "email": "nominal",
+    "id": "quantitative",
+    "rev": "nominal",
+    "date": "temporal",
+    "composed_rev": "nominal",
+    "repository_id": "quantitative"
+}
