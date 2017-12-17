@@ -121,7 +121,7 @@ function buildDetailNodeHtml(interaction) {
             if (params.color !== undefined) p += "color: " + param.color.field;
             break;
         case "changeColor":
-            schemes = ["accent", "pastel1", "tableau20", "set2", "category20", "category20b", "category20c"];
+            schemes = ["accent", "pastel1", "tableau20", "set2", "category10", "category20", "category20b", "category20c"];
             p += params.param + ": <br />";
             p += buildSelectBox(schemes, "interaction" + interaction.index, params.param_scheme);
             addChangeEvent("interaction" + interaction.index, "param_scheme", interaction, true);
@@ -176,10 +176,10 @@ function addChangeEvent(id, paramName, interaction, isAll) {
             interaction.parameters[paramName] = this.value;
             if (isAll) {
                 recoverAll(interaction);
-                
+
             } else {
                 recoverCurrentDetailOnly(interaction);
-                
+
             }
         }
     });
@@ -198,7 +198,7 @@ function findFavoriteNode(interactions) {
         if (d.favorite == true) {
             addFavoritetoNode(d.index);
         }
-    })
+    });
 }
 
 function addFavoritetoNode(nodeId) {
