@@ -1,7 +1,7 @@
 var nodeWidth = 200;
 var nodeHeight = 150;
 var thumbnailWidth = 180;
-var thumbnailHeight = 120;
+var thumbnailHeight = 100;
 var nodeBackgroundColor = "#f8f3e6";
 var nodeRefreshBackgroundColor = "#e9c77b";
 var nodeDefaultStrokeColor = "#cccccc";
@@ -63,14 +63,19 @@ function loadAnchorTree(abstractedLogs) {
     });
 
     var svg_marks = document.getElementsByClassName('marks');
-    svg_marks[0].setAttribute("viewBox", "0 0 200 150"); 
-    svg_marks[1].setAttribute("viewBox", "0 0 230 150"); 
-    svg_marks[2].setAttribute("viewBox", "0 0 380 150"); 
-    
+    svg_marks[0].setAttribute("viewBox", "0 0 200 150");
+    svg_marks[1].setAttribute("viewBox", "0 0 230 150");
+    svg_marks[2].setAttribute("viewBox", "0 0 380 150");
+
     svg.selectAll("g.node").on("click", function(id) {
         var _node = g.node(id);
         clickAnchor(abstractedLogs[id - 1]);
     });
+
+    d3.select("#anchorNode1").attr("transform", "translate(115,195)");
+    d3.select("#anchorNode2").attr("transform", "translate(405,85)");
+    d3.select("#anchorNode3").attr("transform", "translate(700,85)");
+    d3.select("#anchorNode4").attr("transform", "translate(995,85)");
     findFavoriteAnchor(abstractedLogs);
 }
 
@@ -97,33 +102,39 @@ function highlightAnchorNode(nodeId) {
 
 
 function buildAnchorGlyphs(anchor) {
-    var html = "<div>";
+    var html = "<div style='vertical-align:top'>";
     anchorInteraction = anchor.interactions[0];
     switch (anchorInteraction.category) {
         case "Arrange:Chart":
-            html += "<svg style='background-color: #fff;' width=" + thumbnailWidth + " height=" + thumbnailHeight + " id='nodeSvg" + anchor.stage + "'></svg><br/>";
-            html += "x:";
+            html += "<div align=left>&nbsp;x: ";
             if (anchorInteraction.parameters.x_function !== undefined) html += "(" + anchorInteraction.parameters.x_function + ")";
             html += anchorInteraction.parameters.x;
-            html += " y:";
+            html += "<br/>&nbsp;y: ";
             if (anchorInteraction.parameters.y_function !== undefined) html += "(" + anchorInteraction.parameters.y_function + ")";
             html += anchorInteraction.parameters.y;
-
+            html += "</div><Br/><svg style='background-color: #fff;' width=" + thumbnailWidth + " height=" + thumbnailHeight + " id='nodeSvg" + anchor.stage + "'></svg><br/>";
             anchor.existThumbnail = true;
             break;
         case "Manipulate:Select":
+            html += "<div style='height:80px;vertical-align:middle'>";
             switch (anchorInteraction.interaction) {
                 case "filterRange":
-                    html += "<image width=70 src='../images/filter_icon.png' />"
-                    html += anchorInteraction.parameters.target.toUpperCase();
+                    html += "BY " + anchorInteraction.parameters.target_data.toUpperCase();
+                    html += "<image width=100 src='../images/Filter-2-icon.png' />";
                     break;
                 case "filterTop":
-                    html += "<image width=70 src='../images/filter_icon.png' />";
-                    html += "TOP " + anchorInteraction.parameters.param.toUpperCase() + "<br />" + "<br />" + anchorInteraction.parameters.sort.toUpperCase();
+                    html += "<div style='width:50%;float:left;'><br/><br/>";
+                    html += "TOP \"" + anchorInteraction.parameters.param.toUpperCase() + "\"<br />" + anchorInteraction.parameters.sort.toUpperCase();
+                    html += "</div><div style='width:50%;float:right;'>";
+                    html += "<image width=100 src='../images/Filter-2-icon.png' />";
+                    html += "</div><div style='width:50%;float:right;'>";
+                    html += "</div>";
                     break;
             }
+            html += "</div>";
             break;
         case "Facet:Juxtapose":
+            html += "Copy&Juxtapose<br/><br />";
             html += "<svg style='background-color: #fff;' width=" + thumbnailWidth + " height=" + thumbnailHeight + " id=nodeSvg" + anchor.stage + "></svg>";
             anchor.existThumbnail = true;
             break;
@@ -132,28 +143,29 @@ function buildAnchorGlyphs(anchor) {
     return html;
 }
 
-function findFavoriteAnchor(abstractedLogs){
-    abstractedLogs.forEach(function(stage){
-        if(stage.favorite == true){
+function findFavoriteAnchor(abstractedLogs) {
+    abstractedLogs.forEach(function(stage) {
+        if (stage.favorite == true) {
             addFavoritetoAnchor(stage.stage);
         }
     })
 }
-function addFavoritetoAnchor(anchorId){
-    var svg = d3.select("#anchorTreeSvg"); 
+
+function addFavoritetoAnchor(anchorId) {
+    var svg = d3.select("#anchorTreeSvg");
     svg.select("#anchorNode" + anchorId)
-    .append("svg:image")
-    .attr("x", -nodeWidth / 2 - 20)
-    .attr("y", -95)
-    .attr("width", 40)
-    .attr("height", 40)
-    .attr("xlink:href", "./images/star2.png")
-    /*   
-    svg.select("#anchorNode" + anchorId)
-        .append("circle")
-        .attr("cx", -nodeWidth/2)
-        .attr("cy", -80)
-        .attr("r", 10)
-        .style("fill", "red");
-        */
+        .append("svg:image")
+        .attr("x", -nodeWidth / 2 - 20)
+        .attr("y", -95)
+        .attr("width", 40)
+        .attr("height", 40)
+        .attr("xlink:href", "./images/star2.png")
+        /*   
+        svg.select("#anchorNode" + anchorId)
+            .append("circle")
+            .attr("cx", -nodeWidth/2)
+            .attr("cy", -80)
+            .attr("r", 10)
+            .style("fill", "red");
+            */
 }

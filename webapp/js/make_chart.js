@@ -131,7 +131,7 @@ function makeVlSpec(parent_interaction, current_interaction) {
         position[0].encoding = {
             "x": { "field": curr.parameters.x, "type": curr.parameters.x_type, "timeUnit": "year", "axis": { "format": "%Y" } },
             "y": { "field": curr.parameters.y, "type": curr.parameters.y_type, "aggregate": curr.parameters.y_function },
-            "color" :{"field" : color_data, "type" : "nominal"}
+            "color": { "field": color_data, "type": "nominal" }
             //"text" : {"field" :curr.parameters.x, "type" : curr.parameters.x_type, "timeUnit": "year"}
         };
         var tmp = position[0];
@@ -164,8 +164,7 @@ function makeVlSpec(parent_interaction, current_interaction) {
         position.push(rule);
         */
 
-    } else if (curr.interaction == "LikeInteraction") {
-    }
+    } else if (curr.interaction == "LikeInteraction") {}
     curr.VlSpec.title = curr.chart;
     return curr.VlSpec;
 }
@@ -207,6 +206,7 @@ function dynamicallyLoadScript(url_name, fn) {
 function makeChart(VlSpec, paneName) {
     //
     //VlSpec = InteractionList[4][0].VlSpec; // numbering 바꾸면서 stage 확인
+    VlSpec.title = null;
     var opt = {
         mode: "vega-lite",
         actions: false
