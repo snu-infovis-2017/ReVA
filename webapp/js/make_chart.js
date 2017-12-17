@@ -127,10 +127,11 @@ function makeVlSpec(parent_interaction, current_interaction) {
     } else if (curr.interaction == "linechart") {
         curr.VlSpec.transform = null;
         position[0].mark = curr.parameters.mark;
+        var color_data = curr.VlSpec.layer[0].transform[0].filter.field;
         position[0].encoding = {
             "x": { "field": curr.parameters.x, "type": curr.parameters.x_type, "timeUnit": "year", "axis": { "format": "%Y" } },
             "y": { "field": curr.parameters.y, "type": curr.parameters.y_type, "aggregate": curr.parameters.y_function },
-            "color" :{"field" : "email", "type" : "nominal"}
+            "color" :{"field" : color_data, "type" : "nominal"}
             //"text" : {"field" :curr.parameters.x, "type" : curr.parameters.x_type, "timeUnit": "year"}
         };
         var tmp = position[0];
