@@ -121,7 +121,7 @@ function makeVlSpec(parent_interaction, current_interaction) {
             "filter": { "field": params.field, "oneOf": topArray }
         }];
         position[1]["transform"] = [{
-            "filter": { "field": "email", "oneOf": topArray }
+            "filter": { "field": params.field, "oneOf": topArray }
         }];
 
     } else if (curr.interaction == "linechart") {
@@ -260,7 +260,6 @@ function vegaLiteThumbnailSpec(originSpec, width, height) {
         position1.layer[0].encoding.x["axis"] = null;
         position1.layer[0].encoding.y["axis"] = null;
     }
-    console.log(spec);
     return spec;
 }
 
