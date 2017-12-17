@@ -63,9 +63,9 @@ function loadAnchorTree(abstractedLogs) {
     });
 
     var svg_marks = document.getElementsByClassName('marks');
-    svg_marks[0].setAttribute("viewBox", "0 0 200 150");
-    svg_marks[1].setAttribute("viewBox", "0 0 230 150");
-    svg_marks[2].setAttribute("viewBox", "0 0 380 150");
+    svg_marks[0].setAttribute("viewBox", "0 0 200 130");
+    svg_marks[1].setAttribute("viewBox", "0 0 240 130");
+    svg_marks[2].setAttribute("viewBox", "0 0 200 130");
 
     svg.selectAll("g.node").on("click", function(id) {
         var _node = g.node(id);

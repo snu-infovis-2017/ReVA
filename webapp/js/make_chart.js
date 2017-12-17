@@ -237,6 +237,7 @@ function vegaLiteThumbnailSpec(originSpec, width, height) {
         spec.layer[0].encoding.x["axis"] = null;
         //spec.layer[0].encoding.x["scale"] = {"rangeStep" : 100000};
         spec.layer[0].encoding.y["axis"] = null;
+        spec.layer[0].encoding.color["legend"] = null;
     } else if (spec.hconcat) {
         spec.title = null;
         var position0 = spec.hconcat[0];
@@ -259,7 +260,7 @@ function vegaLiteThumbnailSpec(originSpec, width, height) {
         position1.layer[0].encoding.x["axis"] = null;
         position1.layer[0].encoding.y["axis"] = null;
     }
-
+    console.log(spec);
     return spec;
 }
 
