@@ -32,7 +32,7 @@ $("#goReuse").click(function() {
 
     loadScenario("../data/scn1.json", "assembly.json");
     d3.selectAll("#detailInteractionSvg g").remove();
-    d3.selectAll("#chartPane").remove();
+    d3.selectAll("#chartPane canvas").remove();
     document.getElementById("reuseFloatPane").style.visibility = "hidden";
 });
 
