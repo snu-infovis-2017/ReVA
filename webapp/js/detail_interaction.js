@@ -176,8 +176,10 @@ function addChangeEvent(id, paramName, interaction, isAll) {
             interaction.parameters[paramName] = this.value;
             if (isAll) {
                 recoverAll(interaction);
+                
             } else {
                 recoverCurrentDetailOnly(interaction);
+                
             }
         }
     });
