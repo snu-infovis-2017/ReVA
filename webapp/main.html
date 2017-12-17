@@ -31,25 +31,32 @@
             color: #333;
         }
         
-        svg .marks{
-            top : 10;
-            left : 10;
-            fill : #999;
+        svg .marks {
+            top: 10;
+            left: 10;
+            fill: #999;
         }
+        
         table tr td tbody thead th {
             border: none;
             padding: 0px;
         }
         
+        h1 {
+            margin-top: 2px;
+            font: bold;
+        }
+        
         text,
         div,
-        h1,
+        /* h1, */
+        
         h3,
         span {
             font-family: 'Nanum Gothic', sans-serif;
             font-size: 17px;
         }
-
+        
         .anchorTree {
             border: 1px;
         }
@@ -108,58 +115,61 @@
 </head>
 
 <body>
-    <div id="reuseFloatPane" class="form-control" style="font-size:16px;height:300px;left:400px;top:400px;width:400px;position:fixed;visibility:hidden;padding: 20px;" align="center">
-        * change analysis data to <br /> => "ASSEMBLY BILL DATA(2012~2016)" <br /><br /> MAP DATA COLUMNS
-        <div style='display:table;'>
-            <div style='display:table-row;'>
-                <div class="floatLeftDiv" align="right">
-                    (nominal) email:
+    <div style="width:100%">
+        <div id="reuseFloatPane" class="form-control" style="font-size:16px;height:300px;left:400px;top:400px;width:400px;position:fixed;visibility:hidden;padding: 20px;" align="center">
+            * change analysis data to <br /> => "ASSEMBLY BILL DATA(2012~2016)" <br /><br /> MAP DATA COLUMNS
+            <div style='display:table;'>
+                <div style='display:table-row;'>
+                    <div class="floatLeftDiv" align="right">
+                        (nominal) email:
+                    </div>
+                    <div class="floatRightDiv" align="left">
+                        <select class="form-control" id="reuse1"></select>
+                    </div>
                 </div>
-                <div class="floatRightDiv" align="left">
-                    <select class="form-control" id="reuse1"></select>
+                <div style='display:table-row;'>
+                    <div class="floatLeftDiv" align="right">
+                        (quantitative) id:
+                    </div>
+                    <div class="floatRightDiv" align="left">
+                        <!-- <select class="form-control" style="" id="reuse2"></select> -->
+                        <select class="form-control" style="" id="reuse2"></select>
+                    </div>
+                </div>
+                <div style='display:table-row;'>
+                    <div class="floatLeftDiv" align="right">
+                        (temporal) date:
+                    </div>
+                    <div class="floatRightDiv" align="left">
+                        <select class="form-control" id="reuse3"></select>
+                    </div>
+                </div>
+                <div style="display:table-row">
+                    <div class="floatLeftDiv" align="right">
+                    </div>
+                    <div class="floatRightDiv" align="left">
+                        <button id="goReuse" type="button" class="btn btn-primary">REUSE</button>
+                        <button id="hideReuse" type="button" class="btn btn-danger">X</button>
+                    </div>
                 </div>
             </div>
-            <div style='display:table-row;'>
-                <div class="floatLeftDiv" align="right">
-                    (quantitative) id:
+        </div>
+        <div style='display:table;width:1111px;margin:0px'>
+            <div style="display:table-row;">
+                <div style="display: table-cell;font-size:14px;color:#666">
+                    <font size="16"><b>ReVA</b></font>
+                    Visual Analytics interaction log pattern Visulization supporting Recover&Reuse
                 </div>
-                <div class="floatRightDiv" align="left">
-                    <!-- <select class="form-control" style="" id="reuse2"></select> -->
-                    <select class="form-control" style="" id="reuse2"></select>
-                </div>
-            </div>
-            <div style='display:table-row;'>
-                <div class="floatLeftDiv" align="right">
-                    (temporal) date:
-                </div>
-                <div class="floatRightDiv" align="left">
-                    <select class="form-control" id="reuse3"></select>
-                </div>
-            </div>
-            <div style="display:table-row">
-                <div class="floatLeftDiv" align="right">
-                </div>
-                <div class="floatRightDiv" align="left">
-                    <button id="goReuse"  type="button" class="btn btn-primary">REUSE</button>
-                    <button id="hideReuse" type="button" class="btn btn-danger">X</button>
+                <div style="display: table-cell;vertical-align:middle" align="right">
+                    <button id="reuseButton" type="button" class="btn btn-primary">REUSE(Change data)</button>
                 </div>
             </div>
         </div>
-    </div>
-    <div style="width:100%;" valign="middle" align="center" id="anchorTreePane" border=1>
-        <div style="float:left">
-            <div>
-                <h1 id="header" align="left">ReVA</h1>
-            </div>
+        <div style="width:100%;" valign="middle" align="center" id="anchorTreePane" border=1>
+            <svg style="width:100%;height:400px;" id="anchorTreeSvg" class="anchorTreePane" align="center">
+                <g/>
+            </svg>
         </div>
-        <div id="reuseButtonDiv"style="float:left;margin-left:800px;margin-top:30px">
-                <button id="reuseButton" type="button" class="btn btn-primary">REUSE(Change data)</a>
-            </div>
-        <svg style="width:100%;height:400px;" id="anchorTreeSvg" class="anchorTreePane" align="center">
-            <g/>
-        </svg>
-    </div>
-    <div>
         <div class="pane" style="width:400px;float:left;padding-top:50px" align="center" id="detailInteractionPane">
             <svg width="100%" height="70%" id="detailInteractionSvg" class="detailInteractionPane">
                         <g/>
@@ -169,8 +179,8 @@
             <!--chartPane-->
         </div>
     </div>
-    
-    
+
+    </div>
     <script src="js/make_chart.js"></script>
     <script src="js/anchor_tree.js"></script>
     <script src="js/detail_interaction.js"></script>
