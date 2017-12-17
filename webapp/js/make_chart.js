@@ -60,9 +60,9 @@ function makeVlSpec(parent_interaction, current_interaction) {
 
     if (curr.interaction == "orderBy") {
         position[0].encoding.x["sort"] = {
+            "order": curr.parameters.sort,
             "op": curr.parameters.param_function,
-            "field": curr.parameters.param,
-            "order": curr.parameters.sort
+            "field": curr.parameters.param
         };
     } else if (curr.interaction == "changeColor") {
         if (position[0].mark == "line") {
@@ -130,6 +130,7 @@ function makeVlSpec(parent_interaction, current_interaction) {
         position[0].encoding = {
             "x": { "field": curr.parameters.x, "type": curr.parameters.x_type, "timeUnit": "year", "axis": { "format": "%Y" } },
             "y": { "field": curr.parameters.y, "type": curr.parameters.y_type, "aggregate": curr.parameters.y_function },
+            "color" :{"field" : "email", "type" : "nominal"}
             //"text" : {"field" :curr.parameters.x, "type" : curr.parameters.x_type, "timeUnit": "year"}
         };
         var tmp = position[0];
@@ -302,6 +303,5 @@ function getTopValues(field, dataJson, target, targetFunction, rank, orderBy) {
     items.slice(0, rank).forEach(function(d) {
         arr.push(d[0]);
     });
-
     return arr;
 }

@@ -68,7 +68,6 @@ function recoverAll(interaction) {
             abstractedLogs[fi].interactions.forEach(function(d) { d.refresh = true; });
         }
     }
-
     buildVlSpec(abstractedLogs, originDataJson);
     loadAnchorTree(abstractedLogs);
     clickAnchor(abstractedLogs[interaction.stage - 1]);
